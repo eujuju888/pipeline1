@@ -1,4 +1,4 @@
-# AI Pipeline API
+# BSF Strategic Diagnostic Pipeline
 
 ## Install
 npm install
@@ -7,5 +7,5 @@ npm install
 npm start
 
 ## Environment variables
-- CLAUDE_API_KEY
-- LICENSE_DB_URL
+- ANTHROPIC_API_KEY
+- LEMONSQUEEZY_API_KEY

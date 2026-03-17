@@ -6,72 +6,72 @@
 <title>BSF Strategic Diagnostic</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Segoe UI',system-ui,sans-serif;background:#f1f5f9;min-height:100vh}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:#f1f5f9;min-height:100vh;font-size:15px}
 .topbar{background:#0a1628;padding:10px 24px;display:flex;align-items:center;justify-content:space-between}
-.topbar-brand{color:#93c5fd;font-size:11px;letter-spacing:2px;text-transform:uppercase;font-weight:700}
-.topbar-badge{background:#2c5282;color:#c7d9f5;font-size:9px;padding:3px 10px;border-radius:10px;font-weight:600}
+.topbar-brand{color:#93c5fd;font-size:13px;letter-spacing:2px;text-transform:uppercase;font-weight:700}
+.topbar-badge{background:#2c5282;color:#c7d9f5;font-size:11px;padding:3px 10px;border-radius:10px;font-weight:600}
 .hero{background:linear-gradient(135deg,#0a1628 0%,#1e3a5f 60%,#1a4a7a 100%);padding:40px 24px 36px;color:#fff}
-.hero h1{font-size:1.7rem;font-weight:800;line-height:1.2;margin-bottom:10px}
-.hero p{color:#93c5fd;font-size:13px;line-height:1.7;max-width:500px}
+.hero h1{font-size:1.9rem;font-weight:800;line-height:1.2;margin-bottom:10px}
+.hero p{color:#93c5fd;font-size:15px;line-height:1.7;max-width:500px}
 .stats{display:flex;background:#fff;border-bottom:1px solid #cbd5e1}
 .stat{flex:1;padding:10px 16px;border-right:1px solid #cbd5e1}.stat:last-child{border-right:none}
-.stat-label{font-size:8px;color:#64748b;text-transform:uppercase;letter-spacing:1px;margin-bottom:2px}
-.stat-val{font-size:1.1rem;font-weight:800;color:#1e3a5f}
+.stat-label{font-size:11px;color:#64748b;text-transform:uppercase;letter-spacing:1px;margin-bottom:2px}
+.stat-val{font-size:1.2rem;font-weight:800;color:#1e3a5f}
 .main{padding:20px 24px 48px}
 .license-box{background:#fff;border:2px solid #2563eb;border-radius:12px;padding:20px;margin-bottom:16px}
 .license-box.valid{border-color:#16a34a;background:#f0fdf4}
 .license-box.invalid{border-color:#dc2626;background:#fef2f2}
-.license-label{font-size:10px;font-weight:700;color:#0a1628;letter-spacing:.5px;text-transform:uppercase;margin-bottom:8px;display:block}
+.license-label{font-size:12px;font-weight:700;color:#0a1628;letter-spacing:.5px;text-transform:uppercase;margin-bottom:8px;display:block}
 .license-row{display:flex;gap:8px}
-.license-input{flex:1;border:1px solid #cbd5e1;border-radius:8px;padding:10px 12px;font-size:13px;font-family:inherit;outline:none;background:#f8fafc}
-.verify-btn{background:#2563eb;color:#fff;border:none;border-radius:8px;padding:10px 18px;font-size:13px;font-weight:700;cursor:pointer}
-.license-status{margin-top:8px;font-size:12px;display:none}
+.license-input{flex:1;border:1px solid #cbd5e1;border-radius:8px;padding:11px 14px;font-size:15px;font-family:inherit;outline:none;background:#f8fafc}
+.verify-btn{background:#2563eb;color:#fff;border:none;border-radius:8px;padding:11px 20px;font-size:15px;font-weight:700;cursor:pointer}
+.license-status{margin-top:8px;font-size:14px;display:none}
 .license-status.show{display:block}
 .usage-bar-wrap{margin-top:10px;display:none}.usage-bar-wrap.show{display:block}
-.usage-text{font-size:11px;color:#64748b;margin-bottom:4px}
+.usage-text{font-size:13px;color:#64748b;margin-bottom:4px}
 .usage-bar{height:6px;background:#e2e8f0;border-radius:4px;overflow:hidden}
 .usage-fill{height:100%;background:linear-gradient(90deg,#16a34a,#2563eb);border-radius:4px;transition:width .5s}
 .input-section{background:#fff;border:1px solid #cbd5e1;border-radius:12px;padding:18px;margin-bottom:16px;opacity:.5;pointer-events:none;transition:.3s}
 .input-section.unlocked{opacity:1;pointer-events:all}
-.input-label{font-size:10px;font-weight:700;color:#0a1628;letter-spacing:.5px;text-transform:uppercase;margin-bottom:8px;display:block}
-textarea{width:100%;border:1px solid #cbd5e1;border-radius:8px;padding:10px 12px;font-size:13px;font-family:inherit;resize:vertical;min-height:75px;background:#f8fafc;outline:none}
+.input-label{font-size:12px;font-weight:700;color:#0a1628;letter-spacing:.5px;text-transform:uppercase;margin-bottom:8px;display:block}
+textarea{width:100%;border:1px solid #cbd5e1;border-radius:8px;padding:11px 14px;font-size:15px;font-family:inherit;resize:vertical;min-height:85px;background:#f8fafc;outline:none}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
-select{border:1px solid #cbd5e1;border-radius:8px;padding:9px 12px;font-size:12px;font-family:inherit;background:#f8fafc;outline:none;color:#1e293b}
-.run-btn{display:block;width:100%;padding:14px;background:linear-gradient(135deg,#2563eb,#1e3a5f);color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:800;cursor:pointer;margin-top:12px}
+select{border:1px solid #cbd5e1;border-radius:8px;padding:10px 14px;font-size:14px;font-family:inherit;background:#f8fafc;outline:none;color:#1e293b}
+.run-btn{display:block;width:100%;padding:15px;background:linear-gradient(135deg,#2563eb,#1e3a5f);color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:800;cursor:pointer;margin-top:12px}
 .run-btn:disabled{background:#94a3b8;cursor:not-allowed}
-.error-box{background:#fef2f2;border:1px solid #fecaca;color:#dc2626;padding:10px;border-radius:8px;font-size:12px;margin-top:10px;display:none}
+.error-box{background:#fef2f2;border:1px solid #fecaca;color:#dc2626;padding:11px;border-radius:8px;font-size:14px;margin-top:10px;display:none}
 .error-box.show{display:block}
 .status-panel{background:#fff;border:1px solid #cbd5e1;border-radius:10px;padding:14px;margin-bottom:14px;display:none}
 .status-panel.show{display:block}
 .status-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
-.status-title{font-size:9px;font-weight:700;color:#1e3a5f;letter-spacing:1.5px;text-transform:uppercase}
-.status-count{font-size:9px;color:#64748b}
+.status-title{font-size:11px;font-weight:700;color:#1e3a5f;letter-spacing:1.5px;text-transform:uppercase}
+.status-count{font-size:11px;color:#64748b}
 .progress-wrap{background:#e2e8f0;border-radius:4px;height:5px;margin-bottom:12px;overflow:hidden}
 .progress-bar{height:100%;background:linear-gradient(90deg,#2563eb,#16a34a);border-radius:4px;transition:width .5s;width:0%}
-.stage-row{display:flex;align-items:center;gap:9px;padding:5px 0;border-bottom:1px solid #f1f5f9;font-size:11px}
+.stage-row{display:flex;align-items:center;gap:9px;padding:6px 0;border-bottom:1px solid #f1f5f9;font-size:13px}
 .stage-row:last-child{border-bottom:none}
 .dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;background:#e2e8f0}
 .dot.active{background:#2563eb;box-shadow:0 0 6px #2563eb;animation:pulse 1s infinite}
 .dot.done{background:#16a34a}
-.stage-name{min-width:175px;font-weight:600;color:#1e293b}
-.stage-msg{color:#64748b;font-size:10.5px}
+.stage-name{min-width:185px;font-weight:600;color:#1e293b}
+.stage-msg{color:#64748b;font-size:12px}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.2}}
 .report-wrap{display:none}.report-wrap.show{display:block}
 .report-header{background:#0a1628;color:#fff;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;border-radius:10px 10px 0 0}
-.report-title{font-size:11px;font-weight:700}
-.report-body{background:#fff;border:1px solid #cbd5e1;border-top:none;padding:18px;font-size:12.5px;line-height:1.85;color:#1e293b;max-height:600px;overflow-y:auto;white-space:pre-wrap;font-family:monospace;border-radius:0 0 10px 10px}
+.report-title{font-size:13px;font-weight:700}
+.report-body{background:#fff;border:1px solid #cbd5e1;border-top:none;padding:24px 28px;font-size:15px;line-height:1.85;color:#1e293b;max-height:640px;overflow-y:auto;white-space:pre-wrap;font-family:'Segoe UI',system-ui,sans-serif;border-radius:0 0 10px 10px}
 .report-loading{padding:32px;text-align:center;background:#fff;border:1px solid #cbd5e1;border-top:none;border-radius:0 0 10px 10px}
 .report-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
-.btn-copy{padding:11px;background:#dbeafe;color:#1e3a5f;border:1px solid #93c5fd;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer}
-.btn-pdf{padding:11px;background:linear-gradient(135deg,#1a6b2e,#166534);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer}
-.hint{font-size:10.5px;color:#64748b;margin-top:6px;text-align:center}
+.btn-copy{padding:12px;background:#dbeafe;color:#1e3a5f;border:1px solid #93c5fd;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer}
+.btn-pdf{padding:12px;background:linear-gradient(135deg,#1a6b2e,#166534);color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer}
+.hint{font-size:13px;color:#64748b;margin-top:6px;text-align:center}
 .stages-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
-.stage-card{background:#fff;border:1px solid #cbd5e1;border-radius:8px;padding:10px 12px}
+.stage-card{background:#fff;border:1px solid #cbd5e1;border-radius:8px;padding:12px 14px}
 .stage-card:last-child{grid-column:1/-1}
-.sc-num{font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:3px}
-.sc-name{font-size:11.5px;font-weight:700;color:#0a1628;margin-bottom:3px}
-.sc-desc{font-size:10.5px;color:#64748b;line-height:1.5}
-.section-title{font-size:8.5px;color:#64748b;letter-spacing:2px;text-transform:uppercase;font-weight:700;margin-bottom:10px;border-bottom:2px solid #dbeafe;padding-bottom:5px}
+.sc-num{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:3px}
+.sc-name{font-size:13px;font-weight:700;color:#0a1628;margin-bottom:3px}
+.sc-desc{font-size:12px;color:#64748b;line-height:1.5}
+.section-title{font-size:11px;color:#64748b;letter-spacing:2px;text-transform:uppercase;font-weight:700;margin-bottom:10px;border-bottom:2px solid #dbeafe;padding-bottom:5px}
 </style>
 </head>
 <body>
@@ -289,45 +289,47 @@ function openPDF(){
   const html=`<!DOCTYPE html><html><head><meta charset="utf-8"><title>BSF Strategic Diagnostic</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:Helvetica,Arial,sans-serif;font-size:11pt;color:#1e1e1e;background:#e5e7eb;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-.page{width:210mm;min-height:297mm;background:#fff;margin:16px auto;padding:16mm 18mm 24mm;position:relative;box-shadow:0 4px 20px rgba(0,0,0,.2)}
+body{font-family:Helvetica,Arial,sans-serif;font-size:12pt;color:#1e1e1e;background:#e5e7eb;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.page{width:210mm;background:#fff;margin:16px auto;padding:14mm 18mm 20mm;position:relative;box-shadow:0 4px 20px rgba(0,0,0,.2)}
+.page-cover{width:210mm;min-height:297mm;background:#fff;margin:16px auto;padding:14mm 18mm 20mm;position:relative;box-shadow:0 4px 20px rgba(0,0,0,.2)}
 /* COVER */
-.cover-navy{background:#0a1628!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;color:#fff;padding:24px 28px 16px;font-size:22pt;font-weight:800;line-height:1.2}
-.cover-mid{background:#1e3a5f!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;color:#fff;padding:12px 28px;font-size:13pt;font-weight:700}
-.cover-accent{background:#2c5282!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;color:#aabbcc;padding:10px 28px;font-size:10pt;font-style:italic;line-height:1.5}
-.date-line{font-size:10pt;color:#555;font-style:italic;margin-top:16px}
+.cover-navy{background:#0a1628!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;color:#fff;padding:32px 28px 20px;font-size:24pt;font-weight:800;line-height:1.2}
+.cover-mid{background:#1e3a5f!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;color:#fff;padding:14px 28px;font-size:14pt;font-weight:700}
+.cover-accent{background:#2c5282!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;color:#aabbcc;padding:12px 28px;font-size:11pt;font-style:italic;line-height:1.5}
+.date-line{font-size:11pt;color:#555;font-style:italic;margin-top:20px}
 /* SECTION HEADER */
-.sec-num{font-size:9pt;font-weight:700;color:#2c5282;margin-bottom:4px;letter-spacing:1px}
-.sec-title{font-size:16pt;font-weight:800;color:#0a1628;margin-bottom:6px;line-height:1.3}
+.sec-num{font-size:10pt;font-weight:700;color:#2c5282;margin-bottom:4px;letter-spacing:1px}
+.sec-title{font-size:18pt;font-weight:800;color:#0a1628;margin-bottom:6px;line-height:1.3}
 .sec-hr{border:none;border-top:2px solid #2c5282;margin-bottom:6px}
-.sec-agent{font-size:9pt;color:#555;font-style:italic;margin-bottom:16px}
+.sec-agent{font-size:10pt;color:#555;font-style:italic;margin-bottom:16px}
 /* TYPOGRAPHY */
-.body-text{font-size:11pt;line-height:1.7;margin-bottom:6px;color:#1e1e1e}
-.bullet{font-size:11pt;line-height:1.7;margin:3px 0 3px 16px;color:#1e1e1e}
-.key-lbl{font-size:11pt;font-weight:700;color:#0a1628;margin:12px 0 5px}
-.caption{font-size:9pt;color:#555;font-style:italic;margin-bottom:8px}
+.body-text{font-size:12pt;line-height:1.75;margin-bottom:7px;color:#1e1e1e}
+.bullet{font-size:12pt;line-height:1.75;margin:4px 0 4px 18px;color:#1e1e1e}
+.key-lbl{font-size:12pt;font-weight:700;color:#0a1628;margin:14px 0 6px}
+.caption{font-size:10pt;color:#555;font-style:italic;margin-bottom:8px}
 /* TABLES */
-table{width:100%;border-collapse:collapse;font-size:10pt;margin:8px 0 12px}
-th{background:#0a1628!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;color:#fff!important;padding:7px 8px;font-weight:700;text-align:left;font-size:10pt}
-td{padding:6px 8px;border:1px solid #ccc;vertical-align:top;font-size:10pt}
+table{width:100%;border-collapse:collapse;font-size:11pt;margin:8px 0 14px}
+th{background:#0a1628!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;color:#fff!important;padding:8px 10px;font-weight:700;text-align:left;font-size:11pt}
+td{padding:7px 10px;border:1px solid #ccc;vertical-align:top;font-size:11pt}
 tr:nth-child(even) td{background:#f2f6fb!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
 tr.p0 td{background:#fdecea!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
 tr.p1 td{background:#fff8e1!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
 /* PHASE BARS */
-.ph1{background:#c0392b!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;color:#fff;padding:9px 14px;font-size:11pt;font-weight:700;margin:10px 0 5px}
-.ph2{background:#e67e22!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;color:#fff;padding:9px 14px;font-size:11pt;font-weight:700;margin:10px 0 5px}
-.ph3{background:#2c5282!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;color:#fff;padding:9px 14px;font-size:11pt;font-weight:700;margin:10px 0 5px}
+.ph1{background:#c0392b!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;color:#fff;padding:10px 16px;font-size:12pt;font-weight:700;margin:12px 0 6px}
+.ph2{background:#e67e22!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;color:#fff;padding:10px 16px;font-size:12pt;font-weight:700;margin:12px 0 6px}
+.ph3{background:#2c5282!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;color:#fff;padding:10px 16px;font-size:12pt;font-weight:700;margin:12px 0 6px}
 /* EXEC / DISC */
-.exec-hdr{background:#2c5282!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;color:#fff;padding:12px 16px;font-size:14pt;font-weight:700;margin-bottom:14px}
-.disc-hdr{background:#0a1628!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;color:#fff;padding:12px 16px;font-size:12pt;font-weight:700;margin-bottom:14px}
+.exec-hdr{background:#2c5282!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;color:#fff;padding:14px 18px;font-size:15pt;font-weight:700;margin-bottom:16px}
+.disc-hdr{background:#0a1628!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;color:#fff;padding:14px 18px;font-size:13pt;font-weight:700;margin-bottom:16px}
 /* FOOTER */
-.footer{background:#0a1628!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;color:#fff;font-size:8pt;padding:0 18mm;display:flex;justify-content:space-between;position:absolute;bottom:0;left:0;right:0;height:24px;align-items:center}
+.footer{background:#0a1628!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;color:#fff;font-size:9pt;padding:0 18mm;display:flex;justify-content:space-between;margin-top:20px;height:26px;align-items:center}
 /* PRINT */
 .no-print{display:block}
 @media print{
   body{background:#fff}
   .no-print{display:none!important}
   .page{page-break-after:always;box-shadow:none;margin:0}
+  .page-cover{page-break-after:always;box-shadow:none;margin:0}
 }
 </style></head><body>
 <div class="no-print" style="background:#0a1628;color:#fff;padding:12px 24px;display:flex;align-items:center;position:sticky;top:0;z-index:99;gap:16px">
@@ -348,7 +350,7 @@ const SM={
   "STAGE 06":{n:"6",t:"Analytics — KPIs, Benchmarks & ROI",a:"Analytics & ROI · Data Intelligence"},
   "STAGE 07":{n:"7",t:"Execution Roadmap",a:"Execution Roadmap · Cross-Functional Delivery"}
 };
-function op(c){return "<div class='page'>"+c+"<div class='footer'><span>"+T.substring(0,60)+" · BSF Strategic Diagnostic · Confidential</span><span></span></div></div>";}
+let _pgIdx=0;function op(c){_pgIdx++;const cls=_pgIdx===1?"page-cover":"page";return "<div class='"+cls+"'>"+c+"<div class='footer'><span>"+T.substring(0,60)+" · BSF Strategic Diagnostic · Confidential</span><span></span></div></div>";}
 function sh(m){return "<div class='sec-num'>SECTION "+m.n+"</div><div class='sec-title'>"+m.t+"</div><hr class='sec-hr'><div class='sec-agent'>■ "+m.a+"</div>";}
 let html=op(
   "<div class='cover-navy'>BSF STRATEGIC DIAGNOSTIC</div>"+
@@ -383,8 +385,10 @@ for(let i=0;i<lines.length;i++){
     pg="<div class='exec-hdr'>EXECUTIVE SUMMARY</div>";
     continue;
   }
-  // Skip dividers
+  // Skip dividers, markdown headings, and browser artifact lines (URLs, timestamps)
   if(l.startsWith("━")||l.startsWith("===")||l.startsWith("---")){continue;}
+  if(l.startsWith("#")){continue;}
+  if(/^\d+\/\d+\/\d+/.test(l)||l.startsWith("blob:")||l.startsWith("http")){continue;}
   // Phase bars
   if(/phase\s*1.*day/i.test(l)){if(inTable){pg+="</tbody></table>";inTable=false;}pg+="<div class='ph1'>"+l+"</div>";continue;}
   if(/phase\s*2.*day/i.test(l)){if(inTable){pg+="</tbody></table>";inTable=false;}pg+="<div class='ph2'>"+l+"</div>";continue;}

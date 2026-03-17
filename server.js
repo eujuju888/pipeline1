@@ -1,7 +1,6 @@
 const express = require('express');
 const cors = require('cors');
 const fetch = require('node-fetch');
-const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -31,7 +30,7 @@ app.post('/api/verify', async (req, res) => {
     const lsRes = await fetch("https://api.lemonsqueezy.com/v1/licenses/validate", {
       method: "POST",
       headers: {
-        "Authorization": `Bearer ${process.env.LEMONSQUEEZY_API_KEY}`,
+        "Authorization": `Bearer ${process.env.LICENSE_DB_URL}`,
         "Content-Type": "application/json",
         "Accept": "application/json",
       },
@@ -39,10 +38,7 @@ app.post('/api/verify', async (req, res) => {
     });
 
     const lsData = await lsRes.json();
-
-    if (!lsData.valid) {
-      return res.status(200).json({ valid: false, error: "Invalid or expired license key." });
-    }
+    if (!lsData.valid) return res.status(200).json({ valid: false, error: "Invalid or expired license key." });
 
     const used = lsData.license_key?.activation_usage || 0;
     const limit = lsData.license_key?.activation_limit || 10;
@@ -68,7 +64,7 @@ app.post('/api/generate', async (req, res) => {
     const lsRes = await fetch("https://api.lemonsqueezy.com/v1/licenses/validate", {
       method: "POST",
       headers: {
-        "Authorization": `Bearer ${process.env.LEMONSQUEEZY_API_KEY}`,
+        "Authorization": `Bearer ${process.env.LICENSE_DB_URL}`,
         "Content-Type": "application/json",
         "Accept": "application/json",
       },
@@ -86,7 +82,7 @@ app.post('/api/generate', async (req, res) => {
     await fetch("https://api.lemonsqueezy.com/v1/licenses/activate", {
       method: "POST",
       headers: {
-        "Authorization": `Bearer ${process.env.LEMONSQUEEZY_API_KEY}`,
+        "Authorization": `Bearer ${process.env.LICENSE_DB_URL}`,
         "Content-Type": "application/json",
         "Accept": "application/json",
       },
@@ -101,12 +97,12 @@ app.post('/api/generate', async (req, res) => {
       ? `Research Topic: "${topic}"\nLanguage: ${language || "English"}\nFormat: SHORT BRIEF ONLY — maximum 800 words. Top 3 trends, Top 3 friction points, RICE top 3, Top 3 growth tactics, Revenue estimate, 30/60/90 snapshot 2 tasks each, 5-bullet exec summary.`
       : `Research Topic: "${topic}"\nLanguage: ${language || "English"}\nRun all 7 stages in FULL. Deliver every deliverable. Minimum 15 pages of content.`;
 
-    // 5. Call Claude API (no timeout limit on Railway!)
+    // 5. Call Claude API
     const claudeRes = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "x-api-key": process.env.ANTHROPIC_API_KEY,
+        "x-api-key": process.env.CLAUDE_API_KEY,
         "anthropic-version": "2023-06-01",
       },
       body: JSON.stringify({

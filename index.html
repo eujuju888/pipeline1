@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BSF Strategic Diagnostic</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:#f1f5f9;min-height:100vh}
+.topbar{background:#0a1628;padding:10px 24px;display:flex;align-items:center;justify-content:space-between}
+.topbar-brand{color:#93c5fd;font-size:11px;letter-spacing:2px;text-transform:uppercase;font-weight:700}
+.topbar-badge{background:#2c5282;color:#c7d9f5;font-size:9px;padding:3px 10px;border-radius:10px;font-weight:600}
+.hero{background:linear-gradient(135deg,#0a1628 0%,#1e3a5f 60%,#1a4a7a 100%);padding:40px 24px 36px;color:#fff}
+.hero h1{font-size:1.7rem;font-weight:800;line-height:1.2;margin-bottom:10px}
+.hero p{color:#93c5fd;font-size:13px;line-height:1.7;max-width:500px}
+.stats{display:flex;background:#fff;border-bottom:1px solid #cbd5e1}
+.stat{flex:1;padding:10px 16px;border-right:1px solid #cbd5e1}.stat:last-child{border-right:none}
+.stat-label{font-size:8px;color:#64748b;text-transform:uppercase;letter-spacing:1px;margin-bottom:2px}
+.stat-val{font-size:1.1rem;font-weight:800;color:#1e3a5f}
+.main{padding:20px 24px 48px}
+.license-box{background:#fff;border:2px solid #2563eb;border-radius:12px;padding:20px;margin-bottom:16px}
+.license-box.valid{border-color:#16a34a;background:#f0fdf4}
+.license-box.invalid{border-color:#dc2626;background:#fef2f2}
+.license-label{font-size:10px;font-weight:700;color:#0a1628;letter-spacing:.5px;text-transform:uppercase;margin-bottom:8px;display:block}
+.license-row{display:flex;gap:8px}
+.license-input{flex:1;border:1px solid #cbd5e1;border-radius:8px;padding:10px 12px;font-size:13px;font-family:inherit;outline:none;background:#f8fafc}
+.verify-btn{background:#2563eb;color:#fff;border:none;border-radius:8px;padding:10px 18px;font-size:13px;font-weight:700;cursor:pointer}
+.license-status{margin-top:8px;font-size:12px;display:none}
+.license-status.show{display:block}
+.usage-bar-wrap{margin-top:10px;display:none}.usage-bar-wrap.show{display:block}
+.usage-text{font-size:11px;color:#64748b;margin-bottom:4px}
+.usage-bar{height:6px;background:#e2e8f0;border-radius:4px;overflow:hidden}
+.usage-fill{height:100%;background:linear-gradient(90deg,#16a34a,#2563eb);border-radius:4px;transition:width .5s}
+.input-section{background:#fff;border:1px solid #cbd5e1;border-radius:12px;padding:18px;margin-bottom:16px;opacity:.5;pointer-events:none;transition:.3s}
+.input-section.unlocked{opacity:1;pointer-events:all}
+.input-label{font-size:10px;font-weight:700;color:#0a1628;letter-spacing:.5px;text-transform:uppercase;margin-bottom:8px;display:block}
+textarea{width:100%;border:1px solid #cbd5e1;border-radius:8px;padding:10px 12px;font-size:13px;font-family:inherit;resize:vertical;min-height:75px;background:#f8fafc;outline:none}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+select{border:1px solid #cbd5e1;border-radius:8px;padding:9px 12px;font-size:12px;font-family:inherit;background:#f8fafc;outline:none;color:#1e293b}
+.run-btn{display:block;width:100%;padding:14px;background:linear-gradient(135deg,#2563eb,#1e3a5f);color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:800;cursor:pointer;margin-top:12px}
+.run-btn:disabled{background:#94a3b8;cursor:not-allowed}
+.error-box{background:#fef2f2;border:1px solid #fecaca;color:#dc2626;padding:10px;border-radius:8px;font-size:12px;margin-top:10px;display:none}
+.error-box.show{display:block}
+.status-panel{background:#fff;border:1px solid #cbd5e1;border-radius:10px;padding:14px;margin-bottom:14px;display:none}
+.status-panel.show{display:block}
+.status-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.status-title{font-size:9px;font-weight:700;color:#1e3a5f;letter-spacing:1.5px;text-transform:uppercase}
+.status-count{font-size:9px;color:#64748b}
+.progress-wrap{background:#e2e8f0;border-radius:4px;height:5px;margin-bottom:12px;overflow:hidden}
+.progress-bar{height:100%;background:linear-gradient(90deg,#2563eb,#16a34a);border-radius:4px;transition:width .5s;width:0%}
+.stage-row{display:flex;align-items:center;gap:9px;padding:5px 0;border-bottom:1px solid #f1f5f9;font-size:11px}
+.stage-row:last-child{border-bottom:none}
+.dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;background:#e2e8f0}
+.dot.active{background:#2563eb;box-shadow:0 0 6px #2563eb;animation:pulse 1s infinite}
+.dot.done{background:#16a34a}
+.stage-name{min-width:175px;font-weight:600;color:#1e293b}
+.stage-msg{color:#64748b;font-size:10.5px}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.2}}
+.report-wrap{display:none}.report-wrap.show{display:block}
+.report-header{background:#0a1628;color:#fff;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;border-radius:10px 10px 0 0}
+.report-title{font-size:11px;font-weight:700}
+.report-body{background:#fff;border:1px solid #cbd5e1;border-top:none;padding:18px;font-size:12.5px;line-height:1.85;color:#1e293b;max-height:600px;overflow-y:auto;white-space:pre-wrap;font-family:monospace;border-radius:0 0 10px 10px}
+.report-loading{padding:32px;text-align:center;background:#fff;border:1px solid #cbd5e1;border-top:none;border-radius:0 0 10px 10px}
+.report-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.btn-copy{padding:11px;background:#dbeafe;color:#1e3a5f;border:1px solid #93c5fd;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer}
+.btn-pdf{padding:11px;background:linear-gradient(135deg,#1a6b2e,#166534);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer}
+.hint{font-size:10.5px;color:#64748b;margin-top:6px;text-align:center}
+.stages-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
+.stage-card{background:#fff;border:1px solid #cbd5e1;border-radius:8px;padding:10px 12px}
+.stage-card:last-child{grid-column:1/-1}
+.sc-num{font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:3px}
+.sc-name{font-size:11.5px;font-weight:700;color:#0a1628;margin-bottom:3px}
+.sc-desc{font-size:10.5px;color:#64748b;line-height:1.5}
+.section-title{font-size:8.5px;color:#64748b;letter-spacing:2px;text-transform:uppercase;font-weight:700;margin-bottom:10px;border-bottom:2px solid #dbeafe;padding-bottom:5px}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <span class="topbar-brand">BSF Advisory</span>
+  <span class="topbar-badge">7 STAGES</span>
+</div>
+<div class="hero">
+  <h1>Strategic Opportunity<br>Diagnostic</h1>
+  <p>Seven stages — Market Intelligence · UX & Behavioral Research · Voice-of-Customer · Strategic Synthesis · Growth Strategist · Analytics & ROI · Execution Roadmap</p>
+</div>
+<div class="stats">
+  <div class="stat"><div class="stat-label">Stages</div><div class="stat-val">7</div></div>
+  <div class="stat"><div class="stat-label">Sections</div><div class="stat-val">10</div></div>
+  <div class="stat"><div class="stat-label">Scoring</div><div class="stat-val">RICE</div></div>
+  <div class="stat"><div class="stat-label">Export</div><div class="stat-val">PDF</div></div>
+</div>
+<div class="main">
+  <div class="license-box" id="licenseBox">
+    <span class="license-label">🔑 Enter Your License Key</span>
+    <div class="license-row">
+      <input class="license-input" id="licenseInput" type="text" placeholder="Enter your LemonSqueezy license key" />
+      <button class="verify-btn" onclick="verifyLicense()">Verify</button>
+    </div>
+    <div class="license-status" id="licenseStatus"></div>
+    <div class="usage-bar-wrap" id="usageWrap">
+      <div class="usage-text" id="usageText"></div>
+      <div class="usage-bar"><div class="usage-fill" id="usageFill" style="width:0%"></div></div>
+    </div>
+  </div>
+
+  <div class="section-title">Pipeline Stages</div>
+  <div class="stages-grid">
+    <div class="stage-card"><div class="sc-num" style="color:#7c3aed">🔭 Stage 01</div><div class="sc-name">Market Intelligence</div><div class="sc-desc">Market signals, competitive landscape, TAM/SAM/SOM with cited sources.</div></div>
+    <div class="stage-card"><div class="sc-num" style="color:#059669">🔬 Stage 02</div><div class="sc-name">UX & Behavioral Research</div><div class="sc-desc">Customer friction, behavioral insights, personas, and journey mapping.</div></div>
+    <div class="stage-card"><div class="sc-num" style="color:#FF4500">💬 Stage 03</div><div class="sc-name">Voice-of-Customer</div><div class="sc-desc">Authentic community voices, forum patterns, verbatim quotes, sentiment.</div></div>
+    <div class="stage-card"><div class="sc-num" style="color:#2563eb">🔍 Stage 04</div><div class="sc-name">Strategic Synthesis</div><div class="sc-desc">Consolidated insights, RICE priority matrix, opportunity clusters.</div></div>
+    <div class="stage-card"><div class="sc-num" style="color:#0891b2">🚀 Stage 05</div><div class="sc-name">Growth Strategist</div><div class="sc-desc">Growth experiments, acquisition tactics, viral loops, channel scoring.</div></div>
+    <div class="stage-card"><div class="sc-num" style="color:#e67e22">📊 Stage 06</div><div class="sc-name">Analytics & ROI</div><div class="sc-desc">KPIs, ROI estimates, revenue benchmarks, dashboard-style metrics.</div></div>
+    <div class="stage-card"><div class="sc-num" style="color:#be185d">🐑 Stage 07</div><div class="sc-name">Execution Roadmap</div><div class="sc-desc">Phased 90-day plan with task owners, timelines, resource allocation, and risk register.</div></div>
+  </div>
+
+  <div class="section-title">Research Topic</div>
+  <div class="input-section" id="inputSection">
+    <span class="input-label">Industry / Product / Market</span>
+    <textarea id="topicInput" placeholder="e.g. AI-powered customer support tools&#10;e.g. High-end table linen rental — California&#10;e.g. EV adoption barriers in Southeast Asia"></textarea>
+    <div class="row2">
+      <select id="langSelect">
+        <option value="English">🌐 English</option>
+        <option value="Traditional Chinese">🇹🇼 繁體中文</option>
+        <option value="Simplified Chinese">🇨🇳 简体中文</option>
+        <option value="Japanese">🇯🇵 日本語</option>
+        <option value="Korean">🇰🇷 한국어</option>
+        <option value="Spanish">🇪🇸 Español</option>
+        <option value="French">🇫🇷 Français</option>
+        <option value="German">🇩🇪 Deutsch</option>
+        <option value="Portuguese">🇧🇷 Português</option>
+        <option value="Arabic">🇸🇦 العربية</option>
+      </select>
+      <select id="fmtSelect">
+        <option value="full">📄 Full 7-stage report</option>
+        <option value="short">📋 Short executive brief</option>
+      </select>
+    </div>
+    <button class="run-btn" id="runBtn" onclick="runPipeline()">▶ Launch Pipeline</button>
+    <div class="error-box" id="errorBox"></div>
+  </div>
+
+  <div class="status-panel" id="statusPanel">
+    <div class="status-header">
+      <span class="status-title">Pipeline Status</span>
+      <span class="status-count" id="stageCount">0/7 complete</span>
+    </div>
+    <div class="progress-wrap"><div class="progress-bar" id="progressBar"></div></div>
+    <div id="stageList"></div>
+  </div>
+
+  <div class="report-wrap" id="reportWrap">
+    <div class="report-header">
+      <span class="report-title">Strategic Diagnostic Report</span>
+      <div>🔭🔬💬🔍🚀📊🐑</div>
+    </div>
+    <div class="report-loading" id="reportLoading">
+      <div style="font-size:22px;margin-bottom:10px">⏳</div>
+      <div style="color:#2563eb;font-size:13px;font-weight:600;margin-bottom:6px">Running full 7-stage pipeline...</div>
+      <div style="font-size:11px;color:#64748b">Full report takes 60-90 seconds. Please wait.</div>
+    </div>
+    <div class="report-body" id="reportBody" style="display:none"></div>
+    <div class="report-actions" id="reportActions" style="display:none">
+      <button class="btn-copy" onclick="copyReport()">📋 Copy Report</button>
+      <button class="btn-pdf" onclick="openPDF()">🖨 Open PDF Preview</button>
+    </div>
+    <p class="hint" id="reportHint" style="display:none">PDF opens in new tab → Print / Save as PDF</p>
+  </div>
+</div>
+
+<script>
+const STAGES=[
+  {emoji:"🔭",name:"Market Intelligence",msg:"Scanning market signals & competitive landscape…"},
+  {emoji:"🔬",name:"UX & Behavioral Research",msg:"Mapping customer friction & behavioral insights…"},
+  {emoji:"💬",name:"Voice-of-Customer",msg:"Mining community voices & forum patterns…"},
+  {emoji:"🔍",name:"Strategic Synthesis",msg:"Consolidating insights & building RICE matrix…"},
+  {emoji:"🚀",name:"Growth Strategist",msg:"Designing growth experiments & acquisition tactics…"},
+  {emoji:"📊",name:"Analytics & ROI",msg:"Calculating KPIs, ROI estimates & benchmarks…"},
+  {emoji:"🐑",name:"Execution Roadmap",msg:"Building phased 90-day execution roadmap…"},
+];
+let verifiedKey=null,currentReport="",currentTopic="",stageTimers=[];
+
+function renderStages(s,m){
+  document.getElementById("stageList").innerHTML=STAGES.map((st,i)=>
+    '<div class="stage-row"><span class="dot '+s[i]+'"></span><span style="font-size:13px">'+st.emoji+'</span><span class="stage-name">'+st.name+'</span><span class="stage-msg">'+m[i]+'</span></div>'
+  ).join("");
+}
+function animateStages(){
+  stageTimers.forEach(clearTimeout);stageTimers=[];
+  let s=Array(7).fill(""),m=STAGES.map(()=>"Waiting…"),n=0;
+  const tick=()=>{
+    if(n>0){s[n-1]="done";m[n-1]="Complete ✓";}
+    if(n<7){s[n]="active";m[n]=STAGES[n].msg;}
+    renderStages(s,m);
+    document.getElementById("progressBar").style.width=Math.min((n/7)*100,100)+"%";
+    document.getElementById("stageCount").textContent=Math.min(n,7)+"/7 complete";
+    n++;if(n<=7)stageTimers.push(setTimeout(tick,550+Math.random()*300));
+  };tick();
+}
+function finishStages(){
+  stageTimers.forEach(clearTimeout);
+  renderStages(Array(7).fill("done"),Array(7).fill("Complete ✓"));
+  document.getElementById("progressBar").style.width="100%";
+  document.getElementById("stageCount").textContent="7/7 complete";
+}
+
+async function verifyLicense(){
+  const key=document.getElementById("licenseInput").value.trim();
+  if(!key){showStatus("Please enter your license key","#dc2626");return;}
+  showStatus("Verifying…","#2563eb");
+  try{
+    const res=await fetch("/api/verify",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({licenseKey:key})
+    });
+    const data=await res.json().catch(()=>({valid:false,error:"Server error"}));
+    if(data.valid){
+      verifiedKey=key;
+      document.getElementById("licenseBox").className="license-box valid";
+      showStatus("✅ License verified! You are good to go.","#16a34a");
+      document.getElementById("inputSection").classList.add("unlocked");
+      const u=data.usage||{};
+      document.getElementById("usageText").textContent="Reports used: "+(u.used||0)+"/"+(u.limit||10)+" — "+(u.remaining??10)+" remaining";
+      document.getElementById("usageFill").style.width=((u.used||0)/(u.limit||10)*100)+"%";
+      document.getElementById("usageWrap").classList.add("show");
+    }else{
+      document.getElementById("licenseBox").className="license-box invalid";
+      showStatus("❌ "+(data.error||"Invalid license key."),"#dc2626");
+    }
+  }catch(e){showStatus("❌ Connection error: "+e.message,"#dc2626");}
+}
+
+function showStatus(msg,color){
+  const el=document.getElementById("licenseStatus");
+  el.textContent=msg;el.style.color=color;el.classList.add("show");
+}
+
+async function runPipeline(){
+  const topic=document.getElementById("topicInput").value.trim();
+  if(!verifiedKey){showError("Please verify your license key first.");return;}
+  if(!topic){showError("Please enter a research topic.");return;}
+  document.getElementById("errorBox").classList.remove("show");
+  currentTopic=topic;
+  document.getElementById("statusPanel").classList.add("show");
+  document.getElementById("reportWrap").classList.add("show");
+  document.getElementById("reportLoading").style.display="block";
+  document.getElementById("reportBody").style.display="none";
+  document.getElementById("reportActions").style.display="none";
+  document.getElementById("reportHint").style.display="none";
+  const btn=document.getElementById("runBtn");
+  btn.disabled=true;btn.textContent="⏳ Running Pipeline…";
+  animateStages();
+  try{
+    const res=await fetch("/api/generate",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        licenseKey:verifiedKey,
+        topic,
+        language:document.getElementById("langSelect").value,
+        format:document.getElementById("fmtSelect").value
+      })
+    });
+    const data=await res.json().catch(()=>({error:"Server error - invalid response"}));
+    if(data.error){showError(data.error);btn.disabled=false;btn.textContent="▶ Launch Pipeline";return;}
+    currentReport=data.report;
+    finishStages();
+    if(data.usage){
+      document.getElementById("usageText").textContent="Reports used: "+data.usage.used+"/"+data.usage.limit+" — "+data.usage.remaining+" remaining";
+      document.getElementById("usageFill").style.width=(data.usage.used/data.usage.limit*100)+"%";
+    }
+    document.getElementById("reportLoading").style.display="none";
+    document.getElementById("reportBody").style.display="block";
+    document.getElementById("reportBody").textContent=currentReport;
+    document.getElementById("reportActions").style.display="grid";
+    document.getElementById("reportHint").style.display="block";
+  }catch(e){showError("Connection error: "+e.message);}
+  btn.disabled=false;btn.textContent="▶ Launch Pipeline";
+}
+
+function showError(msg){
+  const el=document.getElementById("errorBox");el.textContent=msg;el.classList.add("show");
+}
+function copyReport(){navigator.clipboard.writeText(currentReport).catch(()=>{});}
+
+function openPDF(){
+  const today=new Date().toLocaleDateString("en-US",{year:"numeric",month:"long",day:"numeric"});
+  const html=`<!DOCTYPE html><html><head><meta charset="utf-8"><title>BSF Strategic Diagnostic</title>
+<style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:Helvetica,sans-serif;font-size:9pt;color:#1e1e1e;background:#e5e7eb}.page{width:210mm;min-height:297mm;background:#fff;margin:12px auto;padding:15mm 18mm 22mm;position:relative;box-shadow:0 2px 12px rgba(0,0,0,.15)}.cover-navy{background:#0a1628;color:#fff;padding:20px 24px 14px;font-size:18pt;font-weight:800;line-height:1.2}.cover-mid{background:#1e3a5f;color:#fff;padding:10px 24px;font-size:11pt;font-weight:700}.cover-accent{background:#2c5282;color:#aabbcc;padding:8px 24px;font-size:9pt;font-style:italic}table{width:100%;border-collapse:collapse;font-size:8pt;margin-bottom:8px}th{background:#0a1628;color:#fff;padding:5px 8px;font-weight:700;text-align:left}td{padding:5px 8px;border:1px solid #ccc;vertical-align:top}tr:nth-child(even) td{background:#f2f6fb}tr.p0 td{background:#fdecea!important}tr.p1 td{background:#fff8e1!important}.footer{background:#0a1628;color:#fff;font-size:7pt;padding:0 18mm;display:flex;justify-content:space-between;position:absolute;bottom:0;left:0;right:0;height:22px;align-items:center}.sec-label{font-size:7.5pt;font-weight:700;color:#2c5282;margin-bottom:3px}.sec-title{font-size:13pt;font-weight:800;color:#0a1628;margin-bottom:5px}.body-text{font-size:8.8pt;line-height:1.6;margin-bottom:5px}.bullet{font-size:8.5pt;line-height:1.6;margin:2px 0 2px 14px}.key-lbl{font-size:8.5pt;font-weight:700;color:#0a1628;margin:10px 0 4px}.ph1{background:#c0392b;color:#fff;padding:7px 12px;font-weight:700;margin:8px 0 4px}.ph2{background:#e67e22;color:#fff;padding:7px 12px;font-weight:700;margin:8px 0 4px}.ph3{background:#2c5282;color:#fff;padding:7px 12px;font-weight:700;margin:8px 0 4px}.exec-hdr{background:#2c5282;color:#fff;padding:10px 14px;font-size:11pt;font-weight:700;margin-bottom:12px}.disc-hdr{background:#0a1628;color:#fff;padding:10px 14px;font-size:10pt;font-weight:700;margin-bottom:12px}.no-print{display:block}@media print{.no-print{display:none!important}.page{page-break-after:always;box-shadow:none;margin:0}}</style></head><body>
+<div class="no-print" style="background:#0a1628;color:#fff;padding:10px 20px;display:flex;align-items:center;position:sticky;top:0;z-index:99">
+  <span style="font-size:11pt;font-weight:700">BSF Strategic Diagnostic — PDF Preview</span>
+  <button onclick="window.print()" style="margin-left:auto;background:#2563eb;color:#fff;border:none;padding:8px 20px;border-radius:6px;font-size:11pt;font-weight:700;cursor:pointer">Print / Save as PDF</button>
+</div>
+<div id="pb"></div>
+<script>
+const R=${JSON.stringify(currentReport)};
+const T=${JSON.stringify(currentTopic)};
+const D="${today}";
+const SM={"STAGE 01":{n:"1",t:"Trend Overview & Signal Strength",a:"Market Intelligence"},"STAGE 02":{n:"2",t:"Consumer Behavior & Friction Analysis",a:"UX & Behavioral Research"},"STAGE 03":{n:"3",t:"Community Voices",a:"Voice-of-Customer"},"STAGE 04":{n:"4",t:"Strategic Priority Matrix",a:"Strategic Synthesis"},"STAGE 05":{n:"5",t:"Growth Strategies & Experiments",a:"Growth Strategist"},"STAGE 06":{n:"6",t:"Analytics & ROI",a:"Analytics & ROI"},"STAGE 07":{n:"7",t:"Execution Roadmap",a:"Execution Roadmap"}};
+function op(c){return "<div class='page'>"+c+"<div class='footer'><span>"+T.substring(0,55)+" · BSF Strategic Diagnostic · Confidential</span><span></span></div></div>";}
+function sh(m){return "<div class='sec-label'>SECTION "+m.n+"</div><div class='sec-title'>"+m.t+"</div><hr style='border:none;border-top:1.5px solid #2c5282;margin-bottom:5px'><div style='font-size:8pt;color:#555;font-style:italic;margin-bottom:12px'>■ "+m.a+"</div>";}
+let html=op("<div class='cover-navy'>BSF STRATEGIC DIAGNOSTIC</div><div class='cover-mid'>Market & User Intelligence Report</div><div class='cover-accent'>Research Topic: "+T+"</div><div style='font-size:8pt;color:#555;font-style:italic;margin-top:14px'>Report Date: "+D+" | Confidential</div>");
+const lines=R.split("\\n");let pg="";
+for(let i=0;i<lines.length;i++){
+  const l=lines[i].trim();if(!l)continue;
+  let sk=null;for(const k of Object.keys(SM)){if(l.includes(k)){sk=k;break;}}
+  if(sk){if(pg)html+=op(pg);pg=sh(SM[sk]);continue;}
+  if(l.toUpperCase().includes("EXECUTIVE SUMMARY")&&!l.includes("STAGE")){if(pg)html+=op(pg);pg="<div class='exec-hdr'>EXECUTIVE SUMMARY</div>";continue;}
+  if(l.startsWith("━")||l.startsWith("==="))continue;
+  if(/phase\\s*1.*day/i.test(l)){pg+="<div class='ph1'>"+l+"</div>";continue;}
+  if(/phase\\s*2.*day/i.test(l)){pg+="<div class='ph2'>"+l+"</div>";continue;}
+  if(/phase\\s*3.*day/i.test(l)){pg+="<div class='ph3'>"+l+"</div>";continue;}
+  if(l.includes("|")&&l.split("|").filter(p=>p.trim()).length>=2){
+    const parts=l.split("|").map(p=>p.trim()).filter(p=>p);
+    pg+="<table><thead><tr>"+parts.map(p=>"<th>"+p+"</th>").join("")+"</tr></thead><tbody>";
+    let j=i+1;
+    while(j<lines.length){const r=lines[j].trim();if(!r||!r.includes("|"))break;const rp=r.split("|").map(p=>p.trim()).filter(p=>p);const rc=r.toUpperCase().includes("P0")?"p0":r.toUpperCase().includes("P1")&&r.toUpperCase().includes("HIGH")?"p1":"";pg+="<tr class='"+rc+"'>"+rp.map(p=>"<td>"+p+"</td>").join("")+"</tr>";j++;}
+    pg+="</tbody></table>";i=j-1;continue;
+  }
+  if(l.startsWith("●")||l.startsWith("•")||l.startsWith("-")){pg+="<div class='bullet'>• "+l.replace(/^[●•\\-]\\s*/,"")+"</div>";continue;}
+  if(l.length<100&&(l.endsWith(":")||/^\\d+\\./.test(l))){pg+="<div class='key-lbl'>"+l+"</div>";continue;}
+  pg+="<div class='body-text'>"+l+"</div>";
+}
+if(pg)html+=op(pg);
+html+=op("<div class='disc-hdr'>DISCLAIMER</div><div class='bullet'>• Generated by BSF Strategic Diagnostic — 7-stage multi-agent AI framework.</div><div class='bullet'>• Market sizing carries ±20% confidence intervals.</div><div class='bullet'>• ROI projections are directional estimates only.</div><div style='text-align:center;font-size:8pt;color:#555;font-style:italic;margin-top:20px'>Generated: "+D+" · BSF Strategic Diagnostic · Confidential</div>");
+document.getElementById("pb").innerHTML=html;
+<\/script></body></html>`;
+  const blob=new Blob([html],{type:"text/html"});
+  window.open(URL.createObjectURL(blob),"_blank");
+}
+document.getElementById("licenseInput").addEventListener("keypress",e=>{if(e.key==="Enter")verifyLicense();});
+</script>
+</body>
+</html>

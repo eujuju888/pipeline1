@@ -287,43 +287,146 @@ function copyReport(){navigator.clipboard.writeText(currentReport).catch(()=>{})
 function openPDF(){
   const today=new Date().toLocaleDateString("en-US",{year:"numeric",month:"long",day:"numeric"});
   const html=`<!DOCTYPE html><html><head><meta charset="utf-8"><title>BSF Strategic Diagnostic</title>
-<style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:Helvetica,sans-serif;font-size:9pt;color:#1e1e1e;background:#e5e7eb}.page{width:210mm;min-height:297mm;background:#fff;margin:12px auto;padding:15mm 18mm 22mm;position:relative;box-shadow:0 2px 12px rgba(0,0,0,.15)}.cover-navy{background:#0a1628;color:#fff;padding:20px 24px 14px;font-size:18pt;font-weight:800;line-height:1.2}.cover-mid{background:#1e3a5f;color:#fff;padding:10px 24px;font-size:11pt;font-weight:700}.cover-accent{background:#2c5282;color:#aabbcc;padding:8px 24px;font-size:9pt;font-style:italic}table{width:100%;border-collapse:collapse;font-size:8pt;margin-bottom:8px}th{background:#0a1628;color:#fff;padding:5px 8px;font-weight:700;text-align:left}td{padding:5px 8px;border:1px solid #ccc;vertical-align:top}tr:nth-child(even) td{background:#f2f6fb}tr.p0 td{background:#fdecea!important}tr.p1 td{background:#fff8e1!important}.footer{background:#0a1628;color:#fff;font-size:7pt;padding:0 18mm;display:flex;justify-content:space-between;position:absolute;bottom:0;left:0;right:0;height:22px;align-items:center}.sec-label{font-size:7.5pt;font-weight:700;color:#2c5282;margin-bottom:3px}.sec-title{font-size:13pt;font-weight:800;color:#0a1628;margin-bottom:5px}.body-text{font-size:8.8pt;line-height:1.6;margin-bottom:5px}.bullet{font-size:8.5pt;line-height:1.6;margin:2px 0 2px 14px}.key-lbl{font-size:8.5pt;font-weight:700;color:#0a1628;margin:10px 0 4px}.ph1{background:#c0392b;color:#fff;padding:7px 12px;font-weight:700;margin:8px 0 4px}.ph2{background:#e67e22;color:#fff;padding:7px 12px;font-weight:700;margin:8px 0 4px}.ph3{background:#2c5282;color:#fff;padding:7px 12px;font-weight:700;margin:8px 0 4px}.exec-hdr{background:#2c5282;color:#fff;padding:10px 14px;font-size:11pt;font-weight:700;margin-bottom:12px}.disc-hdr{background:#0a1628;color:#fff;padding:10px 14px;font-size:10pt;font-weight:700;margin-bottom:12px}.no-print{display:block}@media print{.no-print{display:none!important}.page{page-break-after:always;box-shadow:none;margin:0}}</style></head><body>
-<div class="no-print" style="background:#0a1628;color:#fff;padding:10px 20px;display:flex;align-items:center;position:sticky;top:0;z-index:99">
-  <span style="font-size:11pt;font-weight:700">BSF Strategic Diagnostic — PDF Preview</span>
-  <button onclick="window.print()" style="margin-left:auto;background:#2563eb;color:#fff;border:none;padding:8px 20px;border-radius:6px;font-size:11pt;font-weight:700;cursor:pointer">Print / Save as PDF</button>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Helvetica,Arial,sans-serif;font-size:11pt;color:#1e1e1e;background:#e5e7eb;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.page{width:210mm;min-height:297mm;background:#fff;margin:16px auto;padding:16mm 18mm 24mm;position:relative;box-shadow:0 4px 20px rgba(0,0,0,.2)}
+/* COVER */
+.cover-navy{background:#0a1628!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;color:#fff;padding:24px 28px 16px;font-size:22pt;font-weight:800;line-height:1.2}
+.cover-mid{background:#1e3a5f!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;color:#fff;padding:12px 28px;font-size:13pt;font-weight:700}
+.cover-accent{background:#2c5282!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;color:#aabbcc;padding:10px 28px;font-size:10pt;font-style:italic;line-height:1.5}
+.date-line{font-size:10pt;color:#555;font-style:italic;margin-top:16px}
+/* SECTION HEADER */
+.sec-num{font-size:9pt;font-weight:700;color:#2c5282;margin-bottom:4px;letter-spacing:1px}
+.sec-title{font-size:16pt;font-weight:800;color:#0a1628;margin-bottom:6px;line-height:1.3}
+.sec-hr{border:none;border-top:2px solid #2c5282;margin-bottom:6px}
+.sec-agent{font-size:9pt;color:#555;font-style:italic;margin-bottom:16px}
+/* TYPOGRAPHY */
+.body-text{font-size:11pt;line-height:1.7;margin-bottom:6px;color:#1e1e1e}
+.bullet{font-size:11pt;line-height:1.7;margin:3px 0 3px 16px;color:#1e1e1e}
+.key-lbl{font-size:11pt;font-weight:700;color:#0a1628;margin:12px 0 5px}
+.caption{font-size:9pt;color:#555;font-style:italic;margin-bottom:8px}
+/* TABLES */
+table{width:100%;border-collapse:collapse;font-size:10pt;margin:8px 0 12px}
+th{background:#0a1628!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;color:#fff!important;padding:7px 8px;font-weight:700;text-align:left;font-size:10pt}
+td{padding:6px 8px;border:1px solid #ccc;vertical-align:top;font-size:10pt}
+tr:nth-child(even) td{background:#f2f6fb!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+tr.p0 td{background:#fdecea!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+tr.p1 td{background:#fff8e1!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+/* PHASE BARS */
+.ph1{background:#c0392b!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;color:#fff;padding:9px 14px;font-size:11pt;font-weight:700;margin:10px 0 5px}
+.ph2{background:#e67e22!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;color:#fff;padding:9px 14px;font-size:11pt;font-weight:700;margin:10px 0 5px}
+.ph3{background:#2c5282!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;color:#fff;padding:9px 14px;font-size:11pt;font-weight:700;margin:10px 0 5px}
+/* EXEC / DISC */
+.exec-hdr{background:#2c5282!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;color:#fff;padding:12px 16px;font-size:14pt;font-weight:700;margin-bottom:14px}
+.disc-hdr{background:#0a1628!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;color:#fff;padding:12px 16px;font-size:12pt;font-weight:700;margin-bottom:14px}
+/* FOOTER */
+.footer{background:#0a1628!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;color:#fff;font-size:8pt;padding:0 18mm;display:flex;justify-content:space-between;position:absolute;bottom:0;left:0;right:0;height:24px;align-items:center}
+/* PRINT */
+.no-print{display:block}
+@media print{
+  body{background:#fff}
+  .no-print{display:none!important}
+  .page{page-break-after:always;box-shadow:none;margin:0}
+}
+</style></head><body>
+<div class="no-print" style="background:#0a1628;color:#fff;padding:12px 24px;display:flex;align-items:center;position:sticky;top:0;z-index:99;gap:16px">
+  <span style="font-size:13pt;font-weight:700">BSF Strategic Diagnostic — PDF Preview</span>
+  <button onclick="window.print()" style="margin-left:auto;background:#2563eb;color:#fff;border:none;padding:10px 24px;border-radius:6px;font-size:12pt;font-weight:700;cursor:pointer">🖨 Print / Save as PDF</button>
 </div>
 <div id="pb"></div>
 <script>
 const R=${JSON.stringify(currentReport)};
 const T=${JSON.stringify(currentTopic)};
 const D="${today}";
-const SM={"STAGE 01":{n:"1",t:"Trend Overview & Signal Strength",a:"Market Intelligence"},"STAGE 02":{n:"2",t:"Consumer Behavior & Friction Analysis",a:"UX & Behavioral Research"},"STAGE 03":{n:"3",t:"Community Voices",a:"Voice-of-Customer"},"STAGE 04":{n:"4",t:"Strategic Priority Matrix",a:"Strategic Synthesis"},"STAGE 05":{n:"5",t:"Growth Strategies & Experiments",a:"Growth Strategist"},"STAGE 06":{n:"6",t:"Analytics & ROI",a:"Analytics & ROI"},"STAGE 07":{n:"7",t:"Execution Roadmap",a:"Execution Roadmap"}};
-function op(c){return "<div class='page'>"+c+"<div class='footer'><span>"+T.substring(0,55)+" · BSF Strategic Diagnostic · Confidential</span><span></span></div></div>";}
-function sh(m){return "<div class='sec-label'>SECTION "+m.n+"</div><div class='sec-title'>"+m.t+"</div><hr style='border:none;border-top:1.5px solid #2c5282;margin-bottom:5px'><div style='font-size:8pt;color:#555;font-style:italic;margin-bottom:12px'>■ "+m.a+"</div>";}
-let html=op("<div class='cover-navy'>BSF STRATEGIC DIAGNOSTIC</div><div class='cover-mid'>Market & User Intelligence Report</div><div class='cover-accent'>Research Topic: "+T+"</div><div style='font-size:8pt;color:#555;font-style:italic;margin-top:14px'>Report Date: "+D+" | Confidential</div>");
-const lines=R.split("\\n");let pg="";
+const SM={
+  "STAGE 01":{n:"1",t:"Trend Overview & Signal Strength",a:"Market Intelligence · Trend Analysis"},
+  "STAGE 02":{n:"2",t:"Consumer Behavior & Friction Analysis",a:"UX & Behavioral Research · Persona Analysis"},
+  "STAGE 03":{n:"3",t:"Community Voices — Reddit / Forum Patterns",a:"Voice-of-Customer · Community Intelligence"},
+  "STAGE 04":{n:"4",t:"Strategic Priority Matrix",a:"Strategic Synthesis · RICE Prioritization"},
+  "STAGE 05":{n:"5",t:"Growth Strategies & Experiments",a:"Growth Strategist · Acquisition & Viral"},
+  "STAGE 06":{n:"6",t:"Analytics — KPIs, Benchmarks & ROI",a:"Analytics & ROI · Data Intelligence"},
+  "STAGE 07":{n:"7",t:"Execution Roadmap",a:"Execution Roadmap · Cross-Functional Delivery"}
+};
+function op(c){return "<div class='page'>"+c+"<div class='footer'><span>"+T.substring(0,60)+" · BSF Strategic Diagnostic · Confidential</span><span></span></div></div>";}
+function sh(m){return "<div class='sec-num'>SECTION "+m.n+"</div><div class='sec-title'>"+m.t+"</div><hr class='sec-hr'><div class='sec-agent'>■ "+m.a+"</div>";}
+let html=op(
+  "<div class='cover-navy'>BSF STRATEGIC DIAGNOSTIC</div>"+
+  "<div class='cover-mid'>Market & User Intelligence Report</div>"+
+  "<div class='cover-accent'>Research Topic: "+T+"</div>"+
+  "<div class='date-line'>Report Date: "+D+" &nbsp;|&nbsp; Confidential — Internal Use</div>"
+);
+const lines=R.split("\\n");
+let pg="";
+let inTable=false;
+
 for(let i=0;i<lines.length;i++){
-  const l=lines[i].trim();if(!l)continue;
-  let sk=null;for(const k of Object.keys(SM)){if(l.includes(k)){sk=k;break;}}
-  if(sk){if(pg)html+=op(pg);pg=sh(SM[sk]);continue;}
-  if(l.toUpperCase().includes("EXECUTIVE SUMMARY")&&!l.includes("STAGE")){if(pg)html+=op(pg);pg="<div class='exec-hdr'>EXECUTIVE SUMMARY</div>";continue;}
-  if(l.startsWith("━")||l.startsWith("==="))continue;
-  if(/phase\\s*1.*day/i.test(l)){pg+="<div class='ph1'>"+l+"</div>";continue;}
-  if(/phase\\s*2.*day/i.test(l)){pg+="<div class='ph2'>"+l+"</div>";continue;}
-  if(/phase\\s*3.*day/i.test(l)){pg+="<div class='ph3'>"+l+"</div>";continue;}
+  const raw=lines[i];
+  const l=raw.trim();
+  if(!l){
+    if(inTable){pg+="</tbody></table>";inTable=false;}
+    continue;
+  }
+  // Stage headers
+  let sk=null;
+  for(const k of Object.keys(SM)){if(l.includes(k)){sk=k;break;}}
+  if(sk){
+    if(inTable){pg+="</tbody></table>";inTable=false;}
+    if(pg)html+=op(pg);
+    pg=sh(SM[sk]);
+    continue;
+  }
+  // Executive summary
+  if(l.toUpperCase().includes("EXECUTIVE SUMMARY")&&!l.includes("STAGE")){
+    if(inTable){pg+="</tbody></table>";inTable=false;}
+    if(pg)html+=op(pg);
+    pg="<div class='exec-hdr'>EXECUTIVE SUMMARY</div>";
+    continue;
+  }
+  // Skip dividers
+  if(l.startsWith("━")||l.startsWith("===")||l.startsWith("---")){continue;}
+  // Phase bars
+  if(/phase\s*1.*day/i.test(l)){if(inTable){pg+="</tbody></table>";inTable=false;}pg+="<div class='ph1'>"+l+"</div>";continue;}
+  if(/phase\s*2.*day/i.test(l)){if(inTable){pg+="</tbody></table>";inTable=false;}pg+="<div class='ph2'>"+l+"</div>";continue;}
+  if(/phase\s*3.*day/i.test(l)){if(inTable){pg+="</tbody></table>";inTable=false;}pg+="<div class='ph3'>"+l+"</div>";continue;}
+  // Tables
   if(l.includes("|")&&l.split("|").filter(p=>p.trim()).length>=2){
     const parts=l.split("|").map(p=>p.trim()).filter(p=>p);
-    pg+="<table><thead><tr>"+parts.map(p=>"<th>"+p+"</th>").join("")+"</tr></thead><tbody>";
-    let j=i+1;
-    while(j<lines.length){const r=lines[j].trim();if(!r||!r.includes("|"))break;const rp=r.split("|").map(p=>p.trim()).filter(p=>p);const rc=r.toUpperCase().includes("P0")?"p0":r.toUpperCase().includes("P1")&&r.toUpperCase().includes("HIGH")?"p1":"";pg+="<tr class='"+rc+"'>"+rp.map(p=>"<td>"+p+"</td>").join("")+"</tr>";j++;}
-    pg+="</tbody></table>";i=j-1;continue;
+    if(!inTable){
+      pg+="<table><thead><tr>"+parts.map(p=>"<th>"+p+"</th>").join("")+"</tr></thead><tbody>";
+      inTable=true;
+    } else {
+      const rc=l.toUpperCase().includes("P0 CRITICAL")||l.toUpperCase().includes("P0")?"p0":l.toUpperCase().includes("P1 HIGH")||l.toUpperCase().includes("P1")?"p1":"";
+      pg+="<tr class='"+rc+"'>"+parts.map(p=>"<td>"+p+"</td>").join("")+"</tr>";
+    }
+    continue;
+  } else {
+    if(inTable){pg+="</tbody></table>";inTable=false;}
   }
-  if(l.startsWith("●")||l.startsWith("•")||l.startsWith("-")){pg+="<div class='bullet'>• "+l.replace(/^[●•\\-]\\s*/,"")+"</div>";continue;}
-  if(l.length<100&&(l.endsWith(":")||/^\\d+\\./.test(l))){pg+="<div class='key-lbl'>"+l+"</div>";continue;}
+  // Bullets
+  if(l.startsWith("●")||l.startsWith("•")||l.startsWith("- ")){
+    pg+="<div class='bullet'>• "+l.replace(/^[●•]\s*/,"").replace(/^-\s+/,"")+"</div>";
+    continue;
+  }
+  // Numbered / key labels
+  if((l.length<120&&l.endsWith(":")&&!l.includes("|"))||(l.length<80&&/^\d+\./.test(l))){
+    pg+="<div class='key-lbl'>"+l+"</div>";
+    continue;
+  }
   pg+="<div class='body-text'>"+l+"</div>";
 }
+if(inTable){pg+="</tbody></table>";}
 if(pg)html+=op(pg);
-html+=op("<div class='disc-hdr'>DISCLAIMER</div><div class='bullet'>• Generated by BSF Strategic Diagnostic — 7-stage multi-agent AI framework.</div><div class='bullet'>• Market sizing carries ±20% confidence intervals.</div><div class='bullet'>• ROI projections are directional estimates only.</div><div style='text-align:center;font-size:8pt;color:#555;font-style:italic;margin-top:20px'>Generated: "+D+" · BSF Strategic Diagnostic · Confidential</div>");
+// Disclaimer
+html+=op(
+  "<div class='disc-hdr'>ASSUMPTIONS, METHODOLOGY & DISCLAIMER</div>"+
+  "<div class='bullet'>• Generated by BSF Strategic Diagnostic — 7-stage multi-agent AI framework.</div>"+
+  "<div class='bullet'>• Market sizing carries ±20% confidence intervals. All figures are directional estimates.</div>"+
+  "<div class='bullet'>• Community quotes represent simulated patterns based on industry knowledge.</div>"+
+  "<div class='bullet'>• ROI projections are directional estimates only. Actual results will vary.</div>"+
+  "<div class='bullet'>• RICE scoring is a relative prioritization tool, not an absolute measure.</div>"+
+  "<div style='text-align:center;font-size:9pt;color:#555;font-style:italic;margin-top:24px'>Generated: "+D+" · BSF Strategic Diagnostic · Confidential</div>"
+);
 document.getElementById("pb").innerHTML=html;
 <\/script></body></html>`;
   const blob=new Blob([html],{type:"text/html"});

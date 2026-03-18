@@ -76,7 +76,7 @@ select{border:1px solid #cbd5e1;border-radius:8px;padding:9px 12px;font-size:13p
 </head>
 <body>
 <div class="topbar">
-  <span class="topbar-brand">BSF Advisory</span>
+  <span class="topbar-brand">BSF Data Intelligence</span>
   <span class="topbar-badge">7 STAGES</span>
 </div>
 <div class="hero">
@@ -287,42 +287,165 @@ function copyReport(){navigator.clipboard.writeText(currentReport).catch(()=>{})
 
 function openPDF(){
   const today=new Date().toLocaleDateString("en-US",{year:"numeric",month:"long",day:"numeric"});
+
+  // 5 Professional themes with matched font pairs
+  const THEMES=[
+    {
+      name:"Executive Ivory",
+      gfonts:"https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap",
+      fontDisplay:"'Playfair Display', serif",
+      fontBody:"'DM Sans', sans-serif",
+      fontMono:"'DM Mono', monospace",
+      coverBg:"#1a1a1a",
+      coverMidBg:"#2c2c2c",
+      coverAccentBg:"#3a3a3a",
+      coverAccentColor:"#c9a96e",
+      accentColor:"#c9a96e",
+      secNumColor:"#c9a96e",
+      secTitleColor:"#1a1a1a",
+      secHrColor:"#1a1a1a",
+      thBg:"#1a1a1a",
+      execBg:"#1a1a1a",
+      discBg:"#1a1a1a",
+      footerBg:"#1a1a1a",
+      ph1Bg:"#c0392b",ph2Bg:"#c9a96e",ph3Bg:"#1a1a1a",
+      evenRow:"#faf8f5",
+      pageBackground:"#faf8f5"
+    },
+    {
+      name:"Midnight Slate",
+      gfonts:"https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap",
+      fontDisplay:"'Inter', sans-serif",
+      fontBody:"'Inter', sans-serif",
+      fontMono:"'DM Mono', monospace",
+      coverBg:"#0f1218",
+      coverMidBg:"#181c24",
+      coverAccentBg:"#1e2530",
+      coverAccentColor:"#94a3b8",
+      accentColor:"#4a90c4",
+      secNumColor:"#4a90c4",
+      secTitleColor:"#0f1218",
+      secHrColor:"#0f1218",
+      thBg:"#0f1218",
+      execBg:"#0f1218",
+      discBg:"#0f1218",
+      footerBg:"#0f1218",
+      ph1Bg:"#c0392b",ph2Bg:"#e67e22",ph3Bg:"#0f1218",
+      evenRow:"#f0f2f5",
+      pageBackground:"#f0f2f5"
+    },
+    {
+      name:"Arctic Silver",
+      gfonts:"https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap",
+      fontDisplay:"'Playfair Display', serif",
+      fontBody:"'DM Sans', sans-serif",
+      fontMono:"'DM Mono', monospace",
+      coverBg:"#0d1117",
+      coverMidBg:"#161b22",
+      coverAccentBg:"#21262d",
+      coverAccentColor:"#8b949e",
+      accentColor:"#4a90c4",
+      secNumColor:"#4a90c4",
+      secTitleColor:"#0d1117",
+      secHrColor:"#4a90c4",
+      thBg:"#0d1117",
+      execBg:"#0d1117",
+      discBg:"#0d1117",
+      footerBg:"#0d1117",
+      ph1Bg:"#c0392b",ph2Bg:"#e67e22",ph3Bg:"#4a90c4",
+      evenRow:"#eef2f7",
+      pageBackground:"#f0f2f5"
+    },
+    {
+      name:"Parchment Noir",
+      gfonts:"https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap",
+      fontDisplay:"'Libre Baskerville', serif",
+      fontBody:"'DM Sans', sans-serif",
+      fontMono:"'DM Mono', monospace",
+      coverBg:"#1a1710",
+      coverMidBg:"#242018",
+      coverAccentBg:"#2e2920",
+      coverAccentColor:"#c8b98a",
+      accentColor:"#9a8a6a",
+      secNumColor:"#9a8a6a",
+      secTitleColor:"#1a1710",
+      secHrColor:"#1a1710",
+      thBg:"#1a1710",
+      execBg:"#1a1710",
+      discBg:"#1a1710",
+      footerBg:"#1a1710",
+      ph1Bg:"#8a2a1a",ph2Bg:"#9a8a6a",ph3Bg:"#1a1710",
+      evenRow:"#ece6da",
+      pageBackground:"#f2ede4"
+    },
+    {
+      name:"Linen Copper",
+      gfonts:"https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap",
+      fontDisplay:"'Cormorant Garamond', serif",
+      fontBody:"'DM Sans', sans-serif",
+      fontMono:"'DM Mono', monospace",
+      coverBg:"#1e1710",
+      coverMidBg:"#2a2018",
+      coverAccentBg:"#362a20",
+      coverAccentColor:"#d4956a",
+      accentColor:"#b5703a",
+      secNumColor:"#b5703a",
+      secTitleColor:"#1e1710",
+      secHrColor:"#b5703a",
+      thBg:"#1e1710",
+      execBg:"#1e1710",
+      discBg:"#1e1710",
+      footerBg:"#1e1710",
+      ph1Bg:"#8a3a1e",ph2Bg:"#b5703a",ph3Bg:"#1e1710",
+      evenRow:"#ede5d8",
+      pageBackground:"#faf7f2"
+    }
+  ];
+
+  const TH=THEMES[Math.floor(Math.random()*THEMES.length)];
+
   const html=`<!DOCTYPE html><html><head><meta charset="utf-8"><title>BSF Strategic Diagnostic</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="${TH.gfonts}" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:Helvetica,Arial,sans-serif;font-size:11pt;color:#1e1e1e;background:#e5e7eb;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-.page{width:210mm;min-height:297mm;background:#fff;margin:16px auto;padding:16mm 18mm 24mm;position:relative;box-shadow:0 4px 20px rgba(0,0,0,.2)}
-/* COVER */
-.cover-navy{background:#0a1628!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;color:#fff;padding:24px 28px 16px;font-size:22pt;font-weight:800;line-height:1.2}
-.cover-mid{background:#1e3a5f!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;color:#fff;padding:12px 28px;font-size:13pt;font-weight:700}
-.cover-accent{background:#2c5282!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;color:#aabbcc;padding:10px 28px;font-size:10pt;font-style:italic;line-height:1.5}
-.date-line{font-size:10pt;color:#555;font-style:italic;margin-top:16px}
+body{font-family:${TH.fontBody};font-size:11pt;color:#1e1e1e;background:#e5e7eb;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.page{width:210mm;min-height:297mm;background:${TH.pageBackground};margin:16px auto;padding:16mm 18mm 24mm;position:relative;box-shadow:0 4px 20px rgba(0,0,0,.2)}
+/* COVER — merged cover + exec summary + stage 01 hint */
+.cover-navy{background:${TH.coverBg}!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;color:#fff;padding:28px 28px 18px;font-size:24pt;font-weight:800;line-height:1.2;font-family:${TH.fontDisplay}}
+.cover-mid{background:${TH.coverMidBg}!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;color:#fff;padding:14px 28px;font-size:13pt;font-weight:600;font-family:${TH.fontDisplay}}
+.cover-accent{background:${TH.coverAccentBg}!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;color:${TH.coverAccentColor};padding:12px 28px;font-size:10pt;font-style:italic;line-height:1.6;font-family:${TH.fontBody}}
+.date-line{font-size:9pt;color:#888;font-style:italic;margin-top:14px;font-family:${TH.fontBody}}
+.cover-divider{border:none;border-top:1px solid #ddd;margin:18px 0 14px}
+.cover-exec-label{font-size:8pt;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:${TH.accentColor};margin-bottom:10px;font-family:${TH.fontBody}}
 /* SECTION HEADER */
-.sec-num{font-size:9pt;font-weight:700;color:#2c5282;margin-bottom:4px;letter-spacing:1px}
-.sec-title{font-size:16pt;font-weight:800;color:#0a1628;margin-bottom:6px;line-height:1.3}
-.sec-hr{border:none;border-top:2px solid #2c5282;margin-bottom:6px}
-.sec-agent{font-size:9pt;color:#555;font-style:italic;margin-bottom:16px}
+.sec-num{font-size:8pt;font-weight:700;color:${TH.secNumColor};margin-bottom:4px;letter-spacing:1.5px;text-transform:uppercase;font-family:${TH.fontBody}}
+.sec-title{font-size:16pt;font-weight:700;color:${TH.secTitleColor};margin-bottom:6px;line-height:1.3;font-family:${TH.fontDisplay}}
+.sec-hr{border:none;border-top:2px solid ${TH.secHrColor};margin-bottom:6px}
+.sec-agent{font-size:8.5pt;color:#777;font-style:italic;margin-bottom:16px;font-family:${TH.fontBody}}
 /* TYPOGRAPHY */
-.body-text{font-size:11pt;line-height:1.7;margin-bottom:6px;color:#1e1e1e}
-.bullet{font-size:11pt;line-height:1.7;margin:3px 0 3px 16px;color:#1e1e1e}
-.key-lbl{font-size:11pt;font-weight:700;color:#0a1628;margin:12px 0 5px}
-.caption{font-size:9pt;color:#555;font-style:italic;margin-bottom:8px}
+.body-text{font-size:10.5pt;line-height:1.75;margin-bottom:6px;color:#2a2a2a;font-family:${TH.fontBody}}
+.bullet{font-size:10.5pt;line-height:1.75;margin:3px 0 3px 16px;color:#2a2a2a;font-family:${TH.fontBody}}
+.key-lbl{font-size:10.5pt;font-weight:700;color:${TH.secTitleColor};margin:12px 0 5px;font-family:${TH.fontDisplay}}
+.caption{font-size:9pt;color:#666;font-style:italic;margin-bottom:8px;font-family:${TH.fontBody}}
 /* TABLES */
-table{width:100%;border-collapse:collapse;font-size:10pt;margin:8px 0 12px}
-th{background:#0a1628!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;color:#fff!important;padding:7px 8px;font-weight:700;text-align:left;font-size:10pt}
-td{padding:6px 8px;border:1px solid #ccc;vertical-align:top;font-size:10pt}
-tr:nth-child(even) td{background:#f2f6fb!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+table{width:100%;border-collapse:collapse;font-size:9.5pt;margin:8px 0 12px;font-family:${TH.fontBody}}
+th{background:${TH.thBg}!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;color:#fff!important;padding:7px 8px;font-weight:600;text-align:left;font-size:9pt;letter-spacing:0.04em}
+td{padding:6px 8px;border:1px solid #ccc;vertical-align:top;font-size:9.5pt}
+td.num-cell{font-family:${TH.fontMono};font-size:9pt}
+tr:nth-child(even) td{background:${TH.evenRow}!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
 tr.p0 td{background:#fdecea!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
 tr.p1 td{background:#fff8e1!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
 /* PHASE BARS */
-.ph1{background:#c0392b!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;color:#fff;padding:9px 14px;font-size:11pt;font-weight:700;margin:10px 0 5px}
-.ph2{background:#e67e22!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;color:#fff;padding:9px 14px;font-size:11pt;font-weight:700;margin:10px 0 5px}
-.ph3{background:#2c5282!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;color:#fff;padding:9px 14px;font-size:11pt;font-weight:700;margin:10px 0 5px}
+.ph1{background:${TH.ph1Bg}!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;color:#fff;padding:9px 14px;font-size:10.5pt;font-weight:700;margin:10px 0 5px;font-family:${TH.fontBody}}
+.ph2{background:${TH.ph2Bg}!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;color:#fff;padding:9px 14px;font-size:10.5pt;font-weight:700;margin:10px 0 5px;font-family:${TH.fontBody}}
+.ph3{background:${TH.ph3Bg}!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;color:#fff;padding:9px 14px;font-size:10.5pt;font-weight:700;margin:10px 0 5px;font-family:${TH.fontBody}}
 /* EXEC / DISC */
-.exec-hdr{background:#2c5282!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;color:#fff;padding:12px 16px;font-size:14pt;font-weight:700;margin-bottom:14px}
-.disc-hdr{background:#0a1628!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;color:#fff;padding:12px 16px;font-size:12pt;font-weight:700;margin-bottom:14px}
+.exec-hdr{background:${TH.execBg}!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;color:#fff;padding:12px 16px;font-size:13pt;font-weight:700;margin-bottom:14px;font-family:${TH.fontDisplay}}
+.disc-hdr{background:${TH.discBg}!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;color:#fff;padding:12px 16px;font-size:12pt;font-weight:700;margin-bottom:14px;font-family:${TH.fontDisplay}}
 /* FOOTER */
-.footer{background:#0a1628!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;color:#fff;font-size:8pt;padding:0 18mm;display:flex;justify-content:space-between;position:absolute;bottom:0;left:0;right:0;height:24px;align-items:center}
+.footer{background:${TH.footerBg}!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;color:#fff;font-size:7.5pt;padding:0 18mm;display:flex;justify-content:space-between;position:absolute;bottom:0;left:0;right:0;height:24px;align-items:center;font-family:${TH.fontBody};letter-spacing:0.04em}
 /* PRINT */
 .no-print{display:block}
 @media print{
@@ -331,8 +454,9 @@ tr.p1 td{background:#fff8e1!important;-webkit-print-color-adjust:exact;print-col
   .page{page-break-after:always;box-shadow:none;margin:0}
 }
 </style></head><body>
-<div class="no-print" style="background:#0a1628;color:#fff;padding:12px 24px;display:flex;align-items:center;position:sticky;top:0;z-index:99;gap:16px">
+<div class="no-print" style="background:#1a1a1a;color:#fff;padding:12px 24px;display:flex;align-items:center;position:sticky;top:0;z-index:99;gap:16px">
   <span style="font-size:13pt;font-weight:700">BSF Strategic Diagnostic — PDF Preview</span>
+  <span style="font-size:10pt;color:#aaa;margin-left:8px">Theme: ${TH.name}</span>
   <button onclick="window.print()" style="margin-left:auto;background:#2563eb;color:#fff;border:none;padding:10px 24px;border-radius:6px;font-size:12pt;font-weight:700;cursor:pointer">🖨 Print / Save as PDF</button>
 </div>
 <div id="pb"></div>
@@ -349,26 +473,84 @@ const SM={
   "STAGE 06":{n:"6",t:"Analytics — KPIs, Benchmarks & ROI",a:"Analytics & ROI · Data Intelligence"},
   "STAGE 07":{n:"7",t:"Execution Roadmap",a:"Execution Roadmap · Cross-Functional Delivery"}
 };
-function op(c){return "<div class='page'>"+c+"<div class='footer'><span>"+T.substring(0,60)+" · BSF Strategic Diagnostic · Confidential</span><span></span></div></div>";}
+function op(c){return "<div class='page'>"+c+"<div class='footer'><span>"+T.substring(0,60)+" · BSF Data Intelligence · Confidential</span><span>"+D+"</span></div></div>";}
 function sh(m){return "<div class='sec-num'>SECTION "+m.n+"</div><div class='sec-title'>"+m.t+"</div><hr class='sec-hr'><div class='sec-agent'>■ "+m.a+"</div>";}
-let html=op(
+
+const lines=R.split("\\n");
+let allLines=[];
+let inTable=false;
+let execLines=[];
+let stage01Lines=[];
+let collectingExec=false;
+let collectingS1=false;
+let foundS2=false;
+
+// First pass: extract exec summary and stage 01 content
+for(let i=0;i<lines.length;i++){
+  const l=lines[i].trim();
+  if(!l) continue;
+  if(l.toUpperCase().includes("EXECUTIVE SUMMARY")&&!l.includes("STAGE")){collectingExec=true;collectingS1=false;continue;}
+  if(l.includes("STAGE 01")){collectingExec=false;collectingS1=true;continue;}
+  if(l.includes("STAGE 02")){collectingS1=false;foundS2=true;}
+  if(collectingExec) execLines.push(lines[i]);
+  if(collectingS1&&!foundS2) stage01Lines.push(lines[i]);
+}
+
+// Build merged cover page (Cover + Exec Summary + Stage 01)
+function renderLines(arr){
+  let out="";let tbl=false;
+  for(const raw of arr){
+    const l=raw.trim();
+    if(!l){if(tbl){out+="</tbody></table>";tbl=false;}continue;}
+    if(l.startsWith("━")||l.startsWith("===")||l.startsWith("---")) continue;
+    if(/phase\s*1.*day/i.test(l)){if(tbl){out+="</tbody></table>";tbl=false;}out+="<div class='ph1'>"+l+"</div>";continue;}
+    if(/phase\s*2.*day/i.test(l)){if(tbl){out+="</tbody></table>";tbl=false;}out+="<div class='ph2'>"+l+"</div>";continue;}
+    if(/phase\s*3.*day/i.test(l)){if(tbl){out+="</tbody></table>";tbl=false;}out+="<div class='ph3'>"+l+"</div>";continue;}
+    if(l.includes("|")&&l.split("|").filter(p=>p.trim()).length>=2){
+      const parts=l.split("|").map(p=>p.trim()).filter(p=>p);
+      if(!tbl){out+="<table><thead><tr>"+parts.map(p=>"<th>"+p+"</th>").join("")+"</tr></thead><tbody>";tbl=true;}
+      else{const rc=l.toUpperCase().includes("P0")?"p0":l.toUpperCase().includes("P1")?"p1":"";out+="<tr class='"+rc+"'>"+parts.map(p=>"<td>"+p+"</td>").join("")+"</tr>";}
+      continue;
+    } else {if(tbl){out+="</tbody></table>";tbl=false;}}
+    if(l.startsWith("●")||l.startsWith("•")||l.startsWith("- ")){out+="<div class='bullet'>• "+l.replace(/^[●•]\s*/,"").replace(/^-\s+/,"")+"</div>";continue;}
+    if((l.length<120&&l.endsWith(":")&&!l.includes("|"))||(l.length<80&&/^\d+\./.test(l))){out+="<div class='key-lbl'>"+l+"</div>";continue;}
+    out+="<div class='body-text'>"+l+"</div>";
+  }
+  if(tbl) out+="</tbody></table>";
+  return out;
+}
+
+// Merged first page
+let coverPage=
   "<div class='cover-navy'>BSF STRATEGIC DIAGNOSTIC</div>"+
   "<div class='cover-mid'>Market & User Intelligence Report</div>"+
   "<div class='cover-accent'>Research Topic: "+T+"</div>"+
-  "<div class='date-line'>Report Date: "+D+" &nbsp;|&nbsp; Confidential — Internal Use</div>"
-);
-const lines=R.split("\\n");
+  "<div class='date-line'>Report Date: "+D+" &nbsp;|&nbsp; Confidential — Internal Use</div>"+
+  "<hr class='cover-divider'>"+
+  "<div class='exec-hdr'>EXECUTIVE SUMMARY</div>"+
+  renderLines(execLines)+
+  "<hr class='cover-divider'>"+
+  "<div class='sec-num'>SECTION 1</div>"+
+  "<div class='sec-title'>Trend Overview & Signal Strength</div>"+
+  "<hr class='sec-hr'>"+
+  "<div class='sec-agent'>■ Market Intelligence · Trend Analysis</div>"+
+  renderLines(stage01Lines);
+
+let html=op(coverPage);
+
+// Remaining stages
 let pg="";
-let inTable=false;
+inTable=false;
+let skipUntilS2=true;
 
 for(let i=0;i<lines.length;i++){
   const raw=lines[i];
   const l=raw.trim();
-  if(!l){
-    if(inTable){pg+="</tbody></table>";inTable=false;}
-    continue;
+  if(skipUntilS2){
+    if(l.includes("STAGE 02")) skipUntilS2=false;
+    else continue;
   }
-  // Stage headers
+  if(!l){if(inTable){pg+="</tbody></table>";inTable=false;}continue;}
   let sk=null;
   for(const k of Object.keys(SM)){if(l.includes(k)){sk=k;break;}}
   if(sk){
@@ -377,56 +559,31 @@ for(let i=0;i<lines.length;i++){
     pg=sh(SM[sk]);
     continue;
   }
-  // Executive summary
-  if(l.toUpperCase().includes("EXECUTIVE SUMMARY")&&!l.includes("STAGE")){
-    if(inTable){pg+="</tbody></table>";inTable=false;}
-    if(pg)html+=op(pg);
-    pg="<div class='exec-hdr'>EXECUTIVE SUMMARY</div>";
-    continue;
-  }
-  // Skip dividers
-  if(l.startsWith("━")||l.startsWith("===")||l.startsWith("---")){continue;}
-  // Phase bars
+  if(l.toUpperCase().includes("EXECUTIVE SUMMARY")&&!l.includes("STAGE")){continue;}
+  if(l.startsWith("━")||l.startsWith("===")||l.startsWith("---")) continue;
   if(/phase\s*1.*day/i.test(l)){if(inTable){pg+="</tbody></table>";inTable=false;}pg+="<div class='ph1'>"+l+"</div>";continue;}
   if(/phase\s*2.*day/i.test(l)){if(inTable){pg+="</tbody></table>";inTable=false;}pg+="<div class='ph2'>"+l+"</div>";continue;}
   if(/phase\s*3.*day/i.test(l)){if(inTable){pg+="</tbody></table>";inTable=false;}pg+="<div class='ph3'>"+l+"</div>";continue;}
-  // Tables
   if(l.includes("|")&&l.split("|").filter(p=>p.trim()).length>=2){
     const parts=l.split("|").map(p=>p.trim()).filter(p=>p);
-    if(!inTable){
-      pg+="<table><thead><tr>"+parts.map(p=>"<th>"+p+"</th>").join("")+"</tr></thead><tbody>";
-      inTable=true;
-    } else {
-      const rc=l.toUpperCase().includes("P0 CRITICAL")||l.toUpperCase().includes("P0")?"p0":l.toUpperCase().includes("P1 HIGH")||l.toUpperCase().includes("P1")?"p1":"";
-      pg+="<tr class='"+rc+"'>"+parts.map(p=>"<td>"+p+"</td>").join("")+"</tr>";
-    }
+    if(!inTable){pg+="<table><thead><tr>"+parts.map(p=>"<th>"+p+"</th>").join("")+"</tr></thead><tbody>";inTable=true;}
+    else{const rc=l.toUpperCase().includes("P0")?"p0":l.toUpperCase().includes("P1")?"p1":"";pg+="<tr class='"+rc+"'>"+parts.map(p=>"<td>"+p+"</td>").join("")+"</tr>";}
     continue;
-  } else {
-    if(inTable){pg+="</tbody></table>";inTable=false;}
-  }
-  // Bullets
-  if(l.startsWith("●")||l.startsWith("•")||l.startsWith("- ")){
-    pg+="<div class='bullet'>• "+l.replace(/^[●•]\s*/,"").replace(/^-\s+/,"")+"</div>";
-    continue;
-  }
-  // Numbered / key labels
-  if((l.length<120&&l.endsWith(":")&&!l.includes("|"))||(l.length<80&&/^\d+\./.test(l))){
-    pg+="<div class='key-lbl'>"+l+"</div>";
-    continue;
-  }
+  } else {if(inTable){pg+="</tbody></table>";inTable=false;}}
+  if(l.startsWith("●")||l.startsWith("•")||l.startsWith("- ")){pg+="<div class='bullet'>• "+l.replace(/^[●•]\s*/,"").replace(/^-\s+/,"")+"</div>";continue;}
+  if((l.length<120&&l.endsWith(":")&&!l.includes("|"))||(l.length<80&&/^\d+\./.test(l))){pg+="<div class='key-lbl'>"+l+"</div>";continue;}
   pg+="<div class='body-text'>"+l+"</div>";
 }
 if(inTable){pg+="</tbody></table>";}
 if(pg)html+=op(pg);
-// Disclaimer
+
+// Disclaimer — new text
 html+=op(
-  "<div class='disc-hdr'>ASSUMPTIONS, METHODOLOGY & DISCLAIMER</div>"+
-  "<div class='bullet'>• Generated by BSF Strategic Diagnostic — 7-stage multi-agent AI framework.</div>"+
-  "<div class='bullet'>• Market sizing carries ±20% confidence intervals. All figures are directional estimates.</div>"+
-  "<div class='bullet'>• Community quotes represent simulated patterns based on industry knowledge.</div>"+
-  "<div class='bullet'>• ROI projections are directional estimates only. Actual results will vary.</div>"+
-  "<div class='bullet'>• RICE scoring is a relative prioritization tool, not an absolute measure.</div>"+
-  "<div style='text-align:center;font-size:9pt;color:#555;font-style:italic;margin-top:24px'>Generated: "+D+" · BSF Strategic Diagnostic · Confidential</div>"
+  "<div class='disc-hdr'>DISCLAIMER</div>"+
+  "<div class='body-text'>This report is generated by artificial intelligence and is provided for informational purposes only. While efforts have been made to ensure the accuracy of the information, no guarantee is made regarding its completeness, reliability, or accuracy.</div>"+
+  "<div class='body-text' style='margin-top:14px'>This content does not constitute financial, legal, or professional advice. Users are advised to independently verify all information and consult with qualified professionals before making any decisions.</div>"+
+  "<div class='body-text' style='margin-top:14px'>The creator of this report assumes no liability for any losses or damages resulting from the use of this information.</div>"+
+  "<div style='text-align:center;font-size:9pt;color:#888;font-style:italic;margin-top:32px'>Generated: "+D+" · BSF Data Intelligence · Confidential</div>"
 );
 document.getElementById("pb").innerHTML=html;
 <\/script></body></html>`;

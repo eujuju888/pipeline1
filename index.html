@@ -404,17 +404,6 @@ function openPDF(){
 
   const TH=THEMES[Math.floor(Math.random()*THEMES.length)];
 
-  // Clean all markdown symbols — defined OUTSIDE template literal
-  function cleanMd(s){
-    if(/^###\s+/.test(s)) return "<div class='key-lbl' style='margin-top:14px;font-size:11pt'>"+s.replace(/^###\s+/,"").replace(/\*\*(.*?)\*\*/g,"<strong>$1</strong>").replace(/\*(.*?)\*/g,"<em>$1</em>")+"</div>";
-    if(/^##\s+/.test(s)) return "<div class='key-lbl' style='font-size:12pt;margin-top:16px'>"+s.replace(/^##\s+/,"").replace(/\*\*(.*?)\*\*/g,"<strong>$1</strong>")+"</div>";
-    if(/^#\s+/.test(s)) return "<div class='key-lbl' style='font-size:13pt;margin-top:18px'>"+s.replace(/^#\s+/,"").replace(/\*\*(.*?)\*\*/g,"<strong>$1</strong>")+"</div>";
-    s=s.replace(/\*\*(.*?)\*\*/g,"<strong>$1</strong>");
-    s=s.replace(/\*(.*?)\*/g,"<em>$1</em>");
-    s=s.replace(/\x60([^\x60]+)\x60/g,"<code style='background:rgba(0,0,0,0.06);padding:1px 4px;border-radius:3px;font-family:monospace;font-size:9pt'>$1<\\/code>");
-    return s;
-  }
-
   const html=`<!DOCTYPE html><html><head><meta charset="utf-8"><title>BSF Strategic Diagnostic</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -486,6 +475,14 @@ const SM={
 };
 function op(c){return "<div class='page'>"+c+"<div class='footer'><span>"+T.substring(0,60)+" · BSF Data Intelligence · Confidential</span><span>"+D+"</span></div></div>";}
 function sh(m){return "<div class='sec-num'>SECTION "+m.n+"</div><div class='sec-title'>"+m.t+"</div><hr class='sec-hr'><div class='sec-agent'>■ "+m.a+"</div>";}
+function cleanMd(s){
+  if(/^###\\s+/.test(s)) return "<div class='key-lbl' style='margin-top:14px;font-size:11pt'>"+s.replace(/^###\\s+/,"").replace(/\\*\\*(.*?)\\*\\*/g,"<strong>$1<\\/strong>").replace(/\\*(.*?)\\*/g,"<em>$1<\\/em>")+"<\\/div>";
+  if(/^##\\s+/.test(s)) return "<div class='key-lbl' style='font-size:12pt;margin-top:16px'>"+s.replace(/^##\\s+/,"").replace(/\\*\\*(.*?)\\*\\*/g,"<strong>$1<\\/strong>")+"<\\/div>";
+  if(/^#\\s+/.test(s)) return "<div class='key-lbl' style='font-size:13pt;margin-top:18px'>"+s.replace(/^#\\s+/,"").replace(/\\*\\*(.*?)\\*\\*/g,"<strong>$1<\\/strong>")+"<\\/div>";
+  s=s.replace(/\\*\\*(.*?)\\*\\*/g,"<strong>$1<\\/strong>");
+  s=s.replace(/\\*(.*?)\\*/g,"<em>$1<\\/em>");
+  return s;
+}
 
 const lines=R.split("\\n");
 let allLines=[];

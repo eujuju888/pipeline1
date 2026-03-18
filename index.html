@@ -91,7 +91,7 @@ select{border:1px solid #cbd5e1;border-radius:8px;padding:9px 12px;font-size:13p
 </div>
 <div class="main">
   <div class="license-box" id="licenseBox">
-    <span class="license-label">🔑 Enter Your License Key</span>
+    <span class="license-label" style="display:flex;align-items:center;justify-content:space-between;"><span>🔑 Enter Your License Key</span><a href="https://bsfdataintelligence.lemonsqueezy.com/checkout/buy/ca890555-f598-4448-9729-d6b4ad121b58" target="_blank" style="font-size:10px;font-weight:700;color:#fff;background:#f59e0b;border-radius:6px;padding:3px 10px;text-decoration:none;letter-spacing:.3px;white-space:nowrap;">🛒 Buy License</a></span>
     <div class="license-row">
       <input class="license-input" id="licenseInput" type="text" placeholder="Enter your LemonSqueezy license key" />
       <button class="verify-btn" onclick="verifyLicense()">Verify</button>
@@ -496,6 +496,23 @@ for(let i=0;i<lines.length;i++){
   if(collectingS1&&!foundS2) stage01Lines.push(lines[i]);
 }
 
+// Clean all markdown symbols — applied to ALL 5 themes
+function cleanMd(s){
+  // ### → styled sub-heading (no # shown)
+  if(/^###\s+/.test(s)) return "<div class='key-lbl' style='margin-top:14px;font-size:11pt'>"+s.replace(/^###\s+/,"").replace(/\*\*(.*?)\*\*/g,"<strong>$1</strong>").replace(/\*(.*?)\*/g,"<em>$1</em>")+"</div>";
+  // ## → slightly larger heading
+  if(/^##\s+/.test(s)) return "<div class='key-lbl' style='font-size:12pt;margin-top:16px'>"+s.replace(/^##\s+/,"").replace(/\*\*(.*?)\*\*/g,"<strong>$1</strong>")+"</div>";
+  // # → largest heading
+  if(/^#\s+/.test(s)) return "<div class='key-lbl' style='font-size:13pt;margin-top:18px'>"+s.replace(/^#\s+/,"").replace(/\*\*(.*?)\*\*/g,"<strong>$1</strong>")+"</div>";
+  // **bold** → <strong>
+  s=s.replace(/\*\*(.*?)\*\*/g,"<strong>$1</strong>");
+  // *italic* → <em>
+  s=s.replace(/\*(.*?)\*/g,"<em>$1</em>");
+  // `code` → styled inline code
+  s=s.replace(/`([^`]+)`/g,"<code style='background:rgba(0,0,0,0.06);padding:1px 4px;border-radius:3px;font-family:monospace;font-size:9pt'>$1</code>");
+  return s;
+}
+
 // Build merged cover page (Cover + Exec Summary + Stage 01)
 function renderLines(arr){
   let out="";let tbl=false;
@@ -503,18 +520,20 @@ function renderLines(arr){
     const l=raw.trim();
     if(!l){if(tbl){out+="</tbody></table>";tbl=false;}continue;}
     if(l.startsWith("━")||l.startsWith("===")||l.startsWith("---")) continue;
-    if(/phase\s*1.*day/i.test(l)){if(tbl){out+="</tbody></table>";tbl=false;}out+="<div class='ph1'>"+l+"</div>";continue;}
-    if(/phase\s*2.*day/i.test(l)){if(tbl){out+="</tbody></table>";tbl=false;}out+="<div class='ph2'>"+l+"</div>";continue;}
-    if(/phase\s*3.*day/i.test(l)){if(tbl){out+="</tbody></table>";tbl=false;}out+="<div class='ph3'>"+l+"</div>";continue;}
+    // Markdown headings handled by cleanMd — skip other processing
+    if(/^#{1,3}\s+/.test(l)){if(tbl){out+="</tbody></table>";tbl=false;}out+=cleanMd(l);continue;}
+    if(/phase\s*1.*day/i.test(l)){if(tbl){out+="</tbody></table>";tbl=false;}out+="<div class='ph1'>"+cleanMd(l)+"</div>";continue;}
+    if(/phase\s*2.*day/i.test(l)){if(tbl){out+="</tbody></table>";tbl=false;}out+="<div class='ph2'>"+cleanMd(l)+"</div>";continue;}
+    if(/phase\s*3.*day/i.test(l)){if(tbl){out+="</tbody></table>";tbl=false;}out+="<div class='ph3'>"+cleanMd(l)+"</div>";continue;}
     if(l.includes("|")&&l.split("|").filter(p=>p.trim()).length>=2){
       const parts=l.split("|").map(p=>p.trim()).filter(p=>p);
-      if(!tbl){out+="<table><thead><tr>"+parts.map(p=>"<th>"+p+"</th>").join("")+"</tr></thead><tbody>";tbl=true;}
-      else{const rc=l.toUpperCase().includes("P0")?"p0":l.toUpperCase().includes("P1")?"p1":"";out+="<tr class='"+rc+"'>"+parts.map(p=>"<td>"+p+"</td>").join("")+"</tr>";}
+      if(!tbl){out+="<table><thead><tr>"+parts.map(p=>"<th>"+cleanMd(p)+"</th>").join("")+"</tr></thead><tbody>";tbl=true;}
+      else{const rc=l.toUpperCase().includes("P0")?"p0":l.toUpperCase().includes("P1")?"p1":"";out+="<tr class='"+rc+"'>"+parts.map(p=>"<td>"+cleanMd(p)+"</td>").join("")+"</tr>";}
       continue;
     } else {if(tbl){out+="</tbody></table>";tbl=false;}}
-    if(l.startsWith("●")||l.startsWith("•")||l.startsWith("- ")){out+="<div class='bullet'>• "+l.replace(/^[●•]\s*/,"").replace(/^-\s+/,"")+"</div>";continue;}
-    if((l.length<120&&l.endsWith(":")&&!l.includes("|"))||(l.length<80&&/^\d+\./.test(l))){out+="<div class='key-lbl'>"+l+"</div>";continue;}
-    out+="<div class='body-text'>"+l+"</div>";
+    if(l.startsWith("●")||l.startsWith("•")||l.startsWith("- ")){out+="<div class='bullet'>• "+cleanMd(l.replace(/^[●•]\s*/,"").replace(/^-\s+/,""))+"</div>";continue;}
+    if((l.length<120&&l.endsWith(":")&&!l.includes("|"))||(l.length<80&&/^\d+\./.test(l))){out+="<div class='key-lbl'>"+cleanMd(l)+"</div>";continue;}
+    out+="<div class='body-text'>"+cleanMd(l)+"</div>";
   }
   if(tbl) out+="</tbody></table>";
   return out;
@@ -561,18 +580,19 @@ for(let i=0;i<lines.length;i++){
   }
   if(l.toUpperCase().includes("EXECUTIVE SUMMARY")&&!l.includes("STAGE")){continue;}
   if(l.startsWith("━")||l.startsWith("===")||l.startsWith("---")) continue;
-  if(/phase\s*1.*day/i.test(l)){if(inTable){pg+="</tbody></table>";inTable=false;}pg+="<div class='ph1'>"+l+"</div>";continue;}
-  if(/phase\s*2.*day/i.test(l)){if(inTable){pg+="</tbody></table>";inTable=false;}pg+="<div class='ph2'>"+l+"</div>";continue;}
-  if(/phase\s*3.*day/i.test(l)){if(inTable){pg+="</tbody></table>";inTable=false;}pg+="<div class='ph3'>"+l+"</div>";continue;}
+  if(/^#{1,3}\s+/.test(l)){if(inTable){pg+="</tbody></table>";inTable=false;}pg+=cleanMd(l);continue;}
+  if(/phase\s*1.*day/i.test(l)){if(inTable){pg+="</tbody></table>";inTable=false;}pg+="<div class='ph1'>"+cleanMd(l)+"</div>";continue;}
+  if(/phase\s*2.*day/i.test(l)){if(inTable){pg+="</tbody></table>";inTable=false;}pg+="<div class='ph2'>"+cleanMd(l)+"</div>";continue;}
+  if(/phase\s*3.*day/i.test(l)){if(inTable){pg+="</tbody></table>";inTable=false;}pg+="<div class='ph3'>"+cleanMd(l)+"</div>";continue;}
   if(l.includes("|")&&l.split("|").filter(p=>p.trim()).length>=2){
     const parts=l.split("|").map(p=>p.trim()).filter(p=>p);
-    if(!inTable){pg+="<table><thead><tr>"+parts.map(p=>"<th>"+p+"</th>").join("")+"</tr></thead><tbody>";inTable=true;}
-    else{const rc=l.toUpperCase().includes("P0")?"p0":l.toUpperCase().includes("P1")?"p1":"";pg+="<tr class='"+rc+"'>"+parts.map(p=>"<td>"+p+"</td>").join("")+"</tr>";}
+    if(!inTable){pg+="<table><thead><tr>"+parts.map(p=>"<th>"+cleanMd(p)+"</th>").join("")+"</tr></thead><tbody>";inTable=true;}
+    else{const rc=l.toUpperCase().includes("P0")?"p0":l.toUpperCase().includes("P1")?"p1":"";pg+="<tr class='"+rc+"'>"+parts.map(p=>"<td>"+cleanMd(p)+"</td>").join("")+"</tr>";}
     continue;
   } else {if(inTable){pg+="</tbody></table>";inTable=false;}}
-  if(l.startsWith("●")||l.startsWith("•")||l.startsWith("- ")){pg+="<div class='bullet'>• "+l.replace(/^[●•]\s*/,"").replace(/^-\s+/,"")+"</div>";continue;}
-  if((l.length<120&&l.endsWith(":")&&!l.includes("|"))||(l.length<80&&/^\d+\./.test(l))){pg+="<div class='key-lbl'>"+l+"</div>";continue;}
-  pg+="<div class='body-text'>"+l+"</div>";
+  if(l.startsWith("●")||l.startsWith("•")||l.startsWith("- ")){pg+="<div class='bullet'>• "+cleanMd(l.replace(/^[●•]\s*/,"").replace(/^-\s+/,""))+"</div>";continue;}
+  if((l.length<120&&l.endsWith(":")&&!l.includes("|"))||(l.length<80&&/^\d+\./.test(l))){pg+="<div class='key-lbl'>"+cleanMd(l)+"</div>";continue;}
+  pg+="<div class='body-text'>"+cleanMd(l)+"</div>";
 }
 if(inTable){pg+="</tbody></table>";}
 if(pg)html+=op(pg);

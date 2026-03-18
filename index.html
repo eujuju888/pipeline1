@@ -404,6 +404,17 @@ function openPDF(){
 
   const TH=THEMES[Math.floor(Math.random()*THEMES.length)];
 
+  // Clean all markdown symbols — defined OUTSIDE template literal
+  function cleanMd(s){
+    if(/^###\s+/.test(s)) return "<div class='key-lbl' style='margin-top:14px;font-size:11pt'>"+s.replace(/^###\s+/,"").replace(/\*\*(.*?)\*\*/g,"<strong>$1</strong>").replace(/\*(.*?)\*/g,"<em>$1</em>")+"</div>";
+    if(/^##\s+/.test(s)) return "<div class='key-lbl' style='font-size:12pt;margin-top:16px'>"+s.replace(/^##\s+/,"").replace(/\*\*(.*?)\*\*/g,"<strong>$1</strong>")+"</div>";
+    if(/^#\s+/.test(s)) return "<div class='key-lbl' style='font-size:13pt;margin-top:18px'>"+s.replace(/^#\s+/,"").replace(/\*\*(.*?)\*\*/g,"<strong>$1</strong>")+"</div>";
+    s=s.replace(/\*\*(.*?)\*\*/g,"<strong>$1</strong>");
+    s=s.replace(/\*(.*?)\*/g,"<em>$1</em>");
+    s=s.replace(/\x60([^\x60]+)\x60/g,"<code style='background:rgba(0,0,0,0.06);padding:1px 4px;border-radius:3px;font-family:monospace;font-size:9pt'>$1<\\/code>");
+    return s;
+  }
+
   const html=`<!DOCTYPE html><html><head><meta charset="utf-8"><title>BSF Strategic Diagnostic</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -496,24 +507,7 @@ for(let i=0;i<lines.length;i++){
   if(collectingS1&&!foundS2) stage01Lines.push(lines[i]);
 }
 
-// Clean all markdown symbols — applied to ALL 5 themes
-function cleanMd(s){
-  // ### → styled sub-heading (no # shown)
-  if(/^###\s+/.test(s)) return "<div class='key-lbl' style='margin-top:14px;font-size:11pt'>"+s.replace(/^###\s+/,"").replace(/\*\*(.*?)\*\*/g,"<strong>$1</strong>").replace(/\*(.*?)\*/g,"<em>$1</em>")+"</div>";
-  // ## → slightly larger heading
-  if(/^##\s+/.test(s)) return "<div class='key-lbl' style='font-size:12pt;margin-top:16px'>"+s.replace(/^##\s+/,"").replace(/\*\*(.*?)\*\*/g,"<strong>$1</strong>")+"</div>";
-  // # → largest heading
-  if(/^#\s+/.test(s)) return "<div class='key-lbl' style='font-size:13pt;margin-top:18px'>"+s.replace(/^#\s+/,"").replace(/\*\*(.*?)\*\*/g,"<strong>$1</strong>")+"</div>";
-  // **bold** → <strong>
-  s=s.replace(/\*\*(.*?)\*\*/g,"<strong>$1</strong>");
-  // *italic* → <em>
-  s=s.replace(/\*(.*?)\*/g,"<em>$1</em>");
-  // `code` → styled inline code
-  s=s.replace(/`([^`]+)`/g,"<code style='background:rgba(0,0,0,0.06);padding:1px 4px;border-radius:3px;font-family:monospace;font-size:9pt'>$1</code>");
-  return s;
-}
-
-// Build merged cover page (Cover + Exec Summary + Stage 01)
+// Build merged cover page: Cover + Exec Summary only
 function renderLines(arr){
   let out="";let tbl=false;
   for(const raw of arr){
@@ -539,34 +533,31 @@ function renderLines(arr){
   return out;
 }
 
-// Merged first page
+// Merged first page: Cover + Exec Summary only (with spacing between)
 let coverPage=
   "<div class='cover-navy'>BSF STRATEGIC DIAGNOSTIC</div>"+
   "<div class='cover-mid'>Market & User Intelligence Report</div>"+
   "<div class='cover-accent'>Research Topic: "+T+"</div>"+
   "<div class='date-line'>Report Date: "+D+" &nbsp;|&nbsp; Confidential — Internal Use</div>"+
-  "<hr class='cover-divider'>"+
+  "<div style='margin-top:32px'></div>"+
+  "<div style='margin-top:8px'></div>"+
+  "<div style='margin-top:8px'></div>"+
+  "<div style='margin-top:8px'></div>"+
   "<div class='exec-hdr'>EXECUTIVE SUMMARY</div>"+
-  renderLines(execLines)+
-  "<hr class='cover-divider'>"+
-  "<div class='sec-num'>SECTION 1</div>"+
-  "<div class='sec-title'>Trend Overview & Signal Strength</div>"+
-  "<hr class='sec-hr'>"+
-  "<div class='sec-agent'>■ Market Intelligence · Trend Analysis</div>"+
-  renderLines(stage01Lines);
+  renderLines(execLines);
 
 let html=op(coverPage);
 
-// Remaining stages
+// Remaining stages — Stage 01 now its own page
 let pg="";
 inTable=false;
-let skipUntilS2=true;
+let skipUntilS1=true;
 
 for(let i=0;i<lines.length;i++){
   const raw=lines[i];
   const l=raw.trim();
-  if(skipUntilS2){
-    if(l.includes("STAGE 02")) skipUntilS2=false;
+  if(skipUntilS1){
+    if(l.includes("STAGE 01")) skipUntilS1=false;
     else continue;
   }
   if(!l){if(inTable){pg+="</tbody></table>";inTable=false;}continue;}
@@ -579,7 +570,7 @@ for(let i=0;i<lines.length;i++){
     continue;
   }
   if(l.toUpperCase().includes("EXECUTIVE SUMMARY")&&!l.includes("STAGE")){continue;}
-  if(l.startsWith("━")||l.startsWith("===")||l.startsWith("---")) continue;
+  if(l.startsWith("━")||l.startsWith("===")||l.startsWith("---")||l.startsWith("---")) continue;
   if(/^#{1,3}\s+/.test(l)){if(inTable){pg+="</tbody></table>";inTable=false;}pg+=cleanMd(l);continue;}
   if(/phase\s*1.*day/i.test(l)){if(inTable){pg+="</tbody></table>";inTable=false;}pg+="<div class='ph1'>"+cleanMd(l)+"</div>";continue;}
   if(/phase\s*2.*day/i.test(l)){if(inTable){pg+="</tbody></table>";inTable=false;}pg+="<div class='ph2'>"+cleanMd(l)+"</div>";continue;}
